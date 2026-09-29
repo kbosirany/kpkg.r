@@ -1,0 +1,102 @@
+---
+title: "Conventions de développement"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Conventions de développement}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Cette vignette décrit les conventions que `create_pkg()` et les
+templates `use_kpkg_*()` supposent.
+
+## Créer un package
+
+```{r}
+library(kpkg.r)
+create_pkg("~/projets/monpkg", title = "Do Something Useful")
+```
+
+Le package est créé en version `0.0.0.9000`, avec :
+
+- l'auteur de `kpkg_author()` et la licence MIT ;
+- roxygen2 (markdown), testthat (3e édition), `README.md`, `NEWS.md` ;
+- un `.lintr` qui limite les lignes à 80 caractères
+  (`lintr::lint_package()` pour vérifier) ;
+- un `_pkgdown.yml` ;
+- les workflows GitHub Actions et le `.gitlab-ci.yml`.
+
+## Branches et versions
+
+- `main` ne contient que des versions publiées (`0.1.0`, `0.1.1`, ...).
+- `dev` contient la version en développement, avec le suffixe `.9000`
+  (`0.1.0.9000`). Tout nouveau travail part de `dev` et y revient par une
+  pull request (GitHub) ou une merge request (GitLab).
+- Le site pkgdown de `main` est publié à la racine, celui de `dev` dans
+  `/dev` (mode de développement `auto` de pkgdown).
+
+Les numéros de version se gèrent avec `usethis::use_version()`, qui met à
+jour `DESCRIPTION` et `NEWS.md` :
+
+```{r}
+usethis::use_version("patch") # 0.1.0.9000 -> 0.1.1
+usethis::use_version("minor") # 0.1.0.9000 -> 0.2.0
+usethis::use_version("dev")   # 0.1.1      -> 0.1.1.9000
+```
+
+## Publier une version
+
+1. Sur `dev`, `usethis::use_version("patch")` (ou `"minor"`, `"major"`),
+   compléter `NEWS.md`, commit et push.
+2. Ouvrir une pull request `dev` -> `main` et la fusionner avec
+   **Create a merge commit** (jamais *squash* ni *rebase*, pour que `main`
+   et `dev` gardent un historique commun).
+3. Sur GitHub, **Releases** > **Draft a new release** : tag `vX.Y.Z`
+   créé sur `main`, titre `kpkg.r X.Y.Z` (nom du package), notes reprises de
+   `NEWS.md`, puis **Publish release**. Le workflow pkgdown republie le site.
+4. Sur `dev`, mettre `main` à jour localement puis
+   `usethis::use_version("dev")`, commit et push.
+
+## Réglages manuels côté GitHub
+
+À faire une fois par dépôt, après le premier push du workflow pkgdown :
+
+1. **Settings** > **Pages** > **Build and deployment** : *Source* =
+   **Deploy from a branch**, *Branch* = **gh-pages** et **/(root)**, puis
+   **Save**. La branche `gh-pages` est créée par le premier passage du
+   workflow pkgdown sur `main` ou `dev`.
+2. **Settings** > **General** > **Pull Requests** : garder **Allow merge
+   commits** coché.
+3. Facultatif, **Settings** > **Rules** > **Rulesets** > **New ruleset** >
+   **New branch ruleset** sur `main` (et `dev`) : *Require a pull request
+   before merging* et *Require status checks to pass* (ajouter les jobs
+   `R-CMD-check`).
+4. Sur la page d'accueil du dépôt, roue dentée de **About** : cocher
+   **Use your GitHub Pages website** pour afficher l'adresse du site.
+
+## Réglages manuels côté GitLab
+
+Le `.gitlab-ci.yml` fait le même travail sur une forge GitLab (par exemple
+après import du dépôt GitHub) :
+
+- le job `check` lance `R CMD check` avec R release et R devel, dans les
+  images Docker `rocker/r-ver` ; il demande donc un runner avec l'exécuteur
+  Docker ;
+- le job `pages` construit le site des branches `main` et `dev` à chaque
+  push sur l'une d'elles (GitLab Pages ne garde que le dernier déploiement)
+  et le publie avec GitLab Pages, `main` à la racine et `dev` dans `/dev`.
+
+Réglages à vérifier une fois par projet :
+
+1. **Settings** > **CI/CD** > **Runners** : un runner (partagé ou de
+   groupe) doit être disponible pour le projet.
+2. **Deploy** > **Pages** : l'adresse du site y apparaît après le premier
+   passage du job `pages`. Le site est construit avec cette adresse
+   (variable `CI_PAGES_URL`) et non avec l'`url` de `_pkgdown.yml`.
+3. **Settings** > **General** > **Visibility, project features,
+   permissions** > **Pages** : choisir qui peut voir le site.
+4. **Settings** > **Merge requests** > **Merge method** : **Merge commit**.

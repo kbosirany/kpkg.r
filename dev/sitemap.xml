@@ -1,0 +1,19 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/LICENSE-text.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/LICENSE.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/articles/index.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/articles/workflow.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/authors.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/index.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/news/index.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/create_pkg.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/index.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/kpkg.r-package.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/kpkg_author.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/kpkg_templates.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_github.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_gitlab.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_lintr.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_pkgdown.html</loc></url>
+</urlset>
+

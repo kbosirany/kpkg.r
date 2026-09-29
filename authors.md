@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/kbosirany/kpkg.r/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/kbosirany/kpkg.r/blob/v0.1.0/DESCRIPTION)
 
 Orlando KB (2026). *kpkg.r: Create R Packages with Personal
 Conventions*. R package version 0.1.0,

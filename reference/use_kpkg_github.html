@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Add the GitHub Actions workflows</h1>
-      <small class="dont-index">Source: <a href="https://github.com/kbosirany/kpkg.r/blob/v0.1.0/R/templates.R" class="external-link"><code>R/templates.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kbosirany/kpkg.r/blob/main/R/templates.R" class="external-link"><code>R/templates.R</code></a></small>
       <div class="d-none name"><code>use_kpkg_github.Rd</code></div>
     </div>
 
@@ -70,7 +70,9 @@ to the templates of the installed kpkg.r version.</p></dd>
 release and oldrel-1), on pushes to <code>main</code> and <code>dev</code> and on pull
 requests.</p></li>
 <li><p><code>pkgdown</code>: builds the pkgdown site and deploys it on the <code>gh-pages</code>
-branch, the site of <code>main</code> at the root and the site of <code>dev</code> in <code>/dev</code>.</p></li>
+branch, the site of <code>main</code> at the root and the site of <code>dev</code> in <code>/dev</code>.
+It runs <code>dev/build_site.R</code>, see <code><a href="use_kpkg_site_scripts.html">use_kpkg_site_scripts()</a></code>, which also
+renders the Quarto books of <code>reports/</code> in the site.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

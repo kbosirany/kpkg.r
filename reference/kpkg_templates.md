@@ -22,10 +22,20 @@ of the installed package), `target` (path in the package created) and
 
 ``` r
 kpkg_templates()
-#>                  template                             target              fun
-#> 1 github/R-CMD-check.yaml .github/workflows/R-CMD-check.yaml  use_kpkg_github
-#> 2     github/pkgdown.yaml     .github/workflows/pkgdown.yaml  use_kpkg_github
-#> 3    gitlab/gitlab-ci.yml                     .gitlab-ci.yml  use_kpkg_gitlab
-#> 4    project/_pkgdown.yml                       _pkgdown.yml use_kpkg_pkgdown
-#> 5           project/lintr                             .lintr   use_kpkg_lintr
+#>                   template                             target
+#> 1  github/R-CMD-check.yaml .github/workflows/R-CMD-check.yaml
+#> 2      github/pkgdown.yaml     .github/workflows/pkgdown.yaml
+#> 3     gitlab/gitlab-ci.yml                     .gitlab-ci.yml
+#> 4     project/_pkgdown.yml                       _pkgdown.yml
+#> 5     project/build_site.R                   dev/build_site.R
+#> 6 project/render_reports.R               dev/render_reports.R
+#> 7            project/lintr                             .lintr
+#>                     fun
+#> 1       use_kpkg_github
+#> 2       use_kpkg_github
+#> 3       use_kpkg_gitlab
+#> 4      use_kpkg_pkgdown
+#> 5 use_kpkg_site_scripts
+#> 6 use_kpkg_site_scripts
+#> 7        use_kpkg_lintr
 ```

@@ -16,3 +16,5 @@
   : Add a lintr configuration
 - [`use_kpkg_pkgdown()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_pkgdown.md)
   : Add a pkgdown configuration
+- [`use_kpkg_site_scripts()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_site_scripts.md)
+  : Add the scripts that build the pkgdown site

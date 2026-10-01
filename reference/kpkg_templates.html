@@ -41,7 +41,7 @@ updates the file."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Templates shipped with kpkg.r</h1>
-      <small class="dont-index">Source: <a href="https://github.com/kbosirany/kpkg.r/blob/v0.1.0/R/templates.R" class="external-link"><code>R/templates.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kbosirany/kpkg.r/blob/main/R/templates.R" class="external-link"><code>R/templates.R</code></a></small>
       <div class="d-none name"><code>kpkg_templates.Rd</code></div>
     </div>
 
@@ -68,12 +68,22 @@ package created) and <code>fun</code> (function that copies it).</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">kpkg_templates</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  template                             target              fun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 github/R-CMD-check.yaml .github/workflows/R-CMD-check.yaml  use_kpkg_github</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     github/pkgdown.yaml     .github/workflows/pkgdown.yaml  use_kpkg_github</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    gitlab/gitlab-ci.yml                     .gitlab-ci.yml  use_kpkg_gitlab</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    project/_pkgdown.yml                       _pkgdown.yml use_kpkg_pkgdown</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           project/lintr                             .lintr   use_kpkg_lintr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   template                             target</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  github/R-CMD-check.yaml .github/workflows/R-CMD-check.yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      github/pkgdown.yaml     .github/workflows/pkgdown.yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     gitlab/gitlab-ci.yml                     .gitlab-ci.yml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     project/_pkgdown.yml                       _pkgdown.yml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     project/build_site.R                   dev/build_site.R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 project/render_reports.R               dev/render_reports.R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            project/lintr                             .lintr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     fun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       use_kpkg_github</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       use_kpkg_github</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       use_kpkg_gitlab</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      use_kpkg_pkgdown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 use_kpkg_site_scripts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 use_kpkg_site_scripts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        use_kpkg_lintr</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

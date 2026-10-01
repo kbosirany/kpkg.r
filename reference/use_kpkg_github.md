@@ -31,7 +31,9 @@ The paths of the files written, invisibly.
 
 - `pkgdown`: builds the pkgdown site and deploys it on the `gh-pages`
   branch, the site of `main` at the root and the site of `dev` in
-  `/dev`.
+  `/dev`. It runs `dev/build_site.R`, see
+  [`use_kpkg_site_scripts()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_site_scripts.md),
+  which also renders the Quarto books of `reports/` in the site.
 
 ## See also
 

@@ -104,3 +104,38 @@ test_that("github_pages_url() handles missing URLs", {
   )
   expect_equal(github_pages_url(path), "https://a.github.io/x/")
 })
+
+test_that("report_packages() finds the packages used by the reports", {
+  env <- new.env()
+  sys.source(
+    system.file("templates/project/render_reports.R", package = "kpkg.r"),
+    envir = env
+  )
+  dir <- withr::local_tempdir()
+  withr::local_dir(dir)
+  writeLines(
+    c("Package: x", "Imports: pkgnotinstalledA", "Suggests: pkgnotinstalledB"),
+    "DESCRIPTION"
+  )
+  dir.create("reports/book", recursive = TRUE)
+  writeLines(
+    c(
+      "A text with prose::notcode and library(proseonly).", "",
+      "```{r}", "library(pkgnotinstalledC)", "pkgnotinstalledD::f()",
+      "# library(pkgnotinstalledcomment)", "library(pkgnotinstalledA)", "```",
+      "", "```{ojs}", "library(pkgnotinstalledojs)", "```", "",
+      "```{r, echo = FALSE}",
+      "requireNamespace(\"pkgnotinstalledE\", quietly = TRUE)", "```"
+    ),
+    "reports/book/index.qmd"
+  )
+  writeLines("pkgnotinstalledF::g()", "reports/book/helper.R")
+  expect_equal(
+    env$report_packages("reports"),
+    paste0("pkgnotinstalled", c("C", "D", "E", "F"))
+  )
+
+  # outside the CI, the missing packages are only reported
+  withr::local_envvar(CI = "false")
+  expect_warning(env$install_report_packages("reports"), "not installed")
+})

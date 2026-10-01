@@ -1,5 +1,10 @@
 # kpkg.r (development version)
 
+* `dev/render_reports.R` installe, en CI, les paquets utilisés par le code des
+  rapports (`library()`, `require()`, `pkg::`) qui ne sont pas installés ;
+  hors CI, il avertit seulement. Plus besoin de les déclarer dans
+  `Suggests` pour que le job `pages` rende les rapports.
+
 * `use_kpkg_readme()` ajoute un `README.Rmd` (et `README.md`) avec les badges
   principaux, et `use_kpkg_badges()` met à jour le bloc de badges d'un README
   existant : pipeline ou `R-CMD-check`, couverture de tests, cycle de vie et

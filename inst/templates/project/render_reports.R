@@ -18,6 +18,81 @@ list_reports <- function(path = "reports") {
   sort(basename(dirname(yml)))
 }
 
+# Packages used by the code of the reports (`library(x)`, `require(x)`,
+# `requireNamespace("x")`, `x::f()`) in the R chunks of the `.qmd` and `.Rmd`
+# files and in the `.R` files, that are not installed. The package itself and
+# the packages of `DESCRIPTION` are not looked for: they are installed with it.
+report_packages <- function(path = "reports") {
+  files <- list.files(
+    path, pattern = "\\.(qmd|Rmd|R)$", recursive = TRUE, full.names = TRUE
+  )
+  code <- unlist(lapply(files, function(file) {
+    lines <- readLines(file, warn = FALSE)
+    if (grepl("\\.R$", file)) {
+      return(lines)
+    }
+    # lines of the R chunks
+    keep <- logical(length(lines))
+    in_r <- FALSE
+    in_other <- FALSE
+    for (i in seq_along(lines)) {
+      if (grepl("^\\s*```", lines[[i]])) {
+        if (in_r || in_other) {
+          in_r <- in_other <- FALSE
+        } else {
+          in_r <- grepl("^\\s*```\\{r[ ,}]|^\\s*```r\\s*$", lines[[i]])
+          in_other <- !in_r
+        }
+      } else {
+        keep[[i]] <- in_r
+      }
+    }
+    lines[keep]
+  }))
+  code <- code[!grepl("^\\s*#", code)]
+  find <- function(pattern) {
+    matches <- regmatches(code, gregexpr(pattern, code, perl = TRUE))
+    sub(pattern, "\\1", unlist(matches), perl = TRUE)
+  }
+  load_call <- "(?:library|require|requireNamespace|loadNamespace)\\("
+  used <- unique(c(
+    find(paste0(load_call, "\\s*[\"']?([A-Za-z][A-Za-z0-9.]*)")),
+    find("\\b([A-Za-z][A-Za-z0-9.]*):::?[A-Za-z_.]")
+  ))
+  known <- character()
+  if (file.exists("DESCRIPTION")) {
+    fields <- read.dcf(
+      "DESCRIPTION", fields = c("Package", "Depends", "Imports", "Suggests")
+    )
+    known <- c(
+      fields[, "Package"],
+      trimws(sub("\\(.*", "", unlist(strsplit(fields[, -1], ","))))
+    )
+  }
+  used <- setdiff(used, known)
+  sort(used[!vapply(used, requireNamespace, logical(1), quietly = TRUE)])
+}
+
+# Installs the packages of the reports that are missing, in the CI (the
+# environment variable `CI` is "true"). Elsewhere, only tells which are
+# missing, rather than changing the library.
+install_report_packages <- function(path = "reports") {
+  missing <- report_packages(path)
+  if (length(missing) == 0) {
+    return(invisible(character()))
+  }
+  if (identical(Sys.getenv("CI"), "true")) {
+    message("Installing the packages of the reports: ", toString(missing))
+    pak::pkg_install(missing)
+  } else {
+    warning(
+      "Packages of the reports are not installed: ", toString(missing),
+      call. = FALSE
+    )
+  }
+  invisible(missing)
+}
+
 # Renders the books in `<site>/reports/<book>/`, and checks that each one has
 # an `index.html`. Returns the folders of the books, invisibly.
 render_reports <- function(site, path = "reports") {
@@ -29,6 +104,7 @@ render_reports <- function(site, path = "reports") {
   if (!requireNamespace("quarto", quietly = TRUE)) {
     stop("The 'quarto' package is required to render the reports.")
   }
+  install_report_packages(path)
   output_dirs <- file.path(site, "reports", books)
   for (i in seq_along(books)) {
     unlink(output_dirs[[i]], recursive = TRUE)

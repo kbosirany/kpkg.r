@@ -23,7 +23,7 @@ create_pkg("~/projets/monpkg", title = "Do Something Useful")
 
 Le package est créé en version `0.0.0.9000`, avec :
 
-- l'auteur de `kpkg_author()` et la licence MIT ;
+- l'auteur de `kpkg_author()` et la licence AGPL (>= 3) ;
 - roxygen2 (markdown), testthat (3e édition), `README.md`, `NEWS.md` ;
 - un `.lintr` qui limite les lignes à 80 caractères
   (`lintr::lint_package()` pour vérifier) ;

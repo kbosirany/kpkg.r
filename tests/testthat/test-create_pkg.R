@@ -11,14 +11,15 @@ test_that("create_pkg() creates a package with the conventions", {
   desc <- read.dcf(file.path(path, "DESCRIPTION"))
   expect_equal(unname(desc[, "Package"]), "monpkg")
   expect_equal(unname(desc[, "Title"]), "Do Something Useful")
-  expect_equal(unname(desc[, "License"]), "MIT + file LICENSE")
+  expect_equal(unname(desc[, "License"]), "AGPL (>= 3)")
   expect_match(desc[, "URL"], "https://github.com/kbosirany/monpkg")
   expect_match(desc[, "URL"], "https://kbosirany.github.io/monpkg/")
   expect_match(desc[, "Authors@R"], "0009-0009-2784-3108")
   expect_match(desc[, "Config/testthat/edition"], "3")
 
-  license <- read_file(file.path(path, "LICENSE"))
-  expect_true("COPYRIGHT HOLDER: Kevin Bosirany Orlando" %in% license)
+  license <- read_file(file.path(path, "LICENSE.md"))
+  expect_true("GNU Affero General Public License" %in% license)
+  expect_false(file.exists(file.path(path, "LICENSE")))
 
   files <- c(
     "README.md", "NEWS.md", ".lintr", "_pkgdown.yml", "tests/testthat.R",

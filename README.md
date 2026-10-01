@@ -13,7 +13,7 @@ Site : <https://kbosirany.github.io/kpkg.r/> (version en développement :
 [/dev](https://kbosirany.github.io/kpkg.r/dev/))
 
 Un compagnon personnel de [usethis](https://usethis.r-lib.org) : créer des
-packages R avec mes conventions (auteur, licence MIT, roxygen2, testthat,
+packages R avec mes conventions (auteur, licence AGPL, roxygen2, testthat,
 lignes de 80 caractères) et ajouter des templates d'intégration continue
 versionnés, pour GitHub Actions comme pour GitLab CI.
 
@@ -29,7 +29,7 @@ pak::pak("kbosirany/kpkg.r")
 ```r
 library(kpkg.r)
 
-# Nouveau package : DESCRIPTION, licence MIT, tests, README, NEWS,
+# Nouveau package : DESCRIPTION, licence AGPL, tests, README, NEWS,
 # .lintr, _pkgdown.yml, workflows GitHub et .gitlab-ci.yml
 create_pkg("~/projets/monpkg", title = "Do Something Useful")
 

@@ -1,7 +1,7 @@
 Package: kpkg.r
 Type: Package
 Title: Create R Packages with Personal Conventions
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person(
       given = c("Kevin", "Bosirany"),

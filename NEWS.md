@@ -1,3 +1,8 @@
+# kpkg.r 0.1.0.9000
+
+* `create_pkg()` utilise maintenant la licence AGPL (>= 3) au lieu de MIT :
+  `License: AGPL (>= 3)` et `LICENSE.md` (plus de fichier `LICENSE`).
+
 # kpkg.r 0.1.0
 
 * Première version.

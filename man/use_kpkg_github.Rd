@@ -25,6 +25,8 @@ release and oldrel-1), on pushes to \code{main} and \code{dev} and on pull
 requests.
 \item \code{pkgdown}: builds the pkgdown site and deploys it on the \code{gh-pages}
 branch, the site of \code{main} at the root and the site of \code{dev} in \verb{/dev}.
+It runs \code{dev/build_site.R}, see \code{\link[=use_kpkg_site_scripts]{use_kpkg_site_scripts()}}, which also
+renders the Quarto books of \verb{reports/} in the site.
 }
 }
 \examples{

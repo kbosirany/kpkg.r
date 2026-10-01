@@ -25,6 +25,31 @@ test_that("use_kpkg_github() copies the workflows with a version header", {
   expect_true("^\\.github$" %in% read_file(file.path(path, ".Rbuildignore")))
 })
 
+test_that("the site scripts are added by the CI and pkgdown functions", {
+  path <- local_pkg()
+  scripts <- file.path(path, "dev", c("build_site.R", "render_reports.R"))
+
+  suppressMessages(use_kpkg_gitlab())
+  expect_true(all(file.exists(scripts)))
+  expect_match(read_file(scripts[1])[1], "^# Template kpkg.r")
+  expect_true("^dev$" %in% read_file(file.path(path, ".Rbuildignore")))
+
+  # a script that exists is kept
+  writeLines("custom", scripts[1])
+  suppressMessages(use_kpkg_github())
+  expect_equal(read_file(scripts[1]), "custom")
+
+  suppressMessages(use_kpkg_site_scripts(overwrite = TRUE))
+  expect_match(read_file(scripts[1])[1], "^# Template kpkg.r")
+})
+
+test_that("the CI runs dev/build_site.R", {
+  for (template in c("github/pkgdown.yaml", "gitlab/gitlab-ci.yml")) {
+    src <- system.file("templates", template, package = "kpkg.r")
+    expect_true(any(grepl("dev/build_site.R", read_file(src), fixed = TRUE)))
+  }
+})
+
 test_that("existing files are kept unless overwrite = TRUE", {
   path <- local_pkg()
   target <- file.path(path, ".gitlab-ci.yml")

@@ -36,18 +36,18 @@ jobs:
         with:
           use-public-rspm: true
 
+      # Quarto CLI, to render the books of `reports/`
+      - uses: quarto-dev/quarto-actions/setup@v2
+        if: hashFiles('reports/*/_quarto.yml') != ''
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown, any::quarto, local::.
           needs: website
 
+      # Builds the site and renders the reports of `reports/` in it
       - name: Build site
-        run: |
-          pkgdown::build_site_github_pages(
-            new_process = FALSE,
-            install = FALSE
-          )
-        shell: Rscript {0}
+        run: Rscript dev/build_site.R
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'

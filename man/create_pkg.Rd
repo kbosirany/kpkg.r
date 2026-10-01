@@ -50,7 +50,7 @@ A wrapper around \code{\link[usethis:create_package]{usethis::create_package()}}
 \itemize{
 \item the author (\code{\link[=kpkg_author]{kpkg_author()}}) in \code{Authors@R};
 \item the \code{URL} and \code{BugReports} fields for a GitHub repository;
-\item the AGPL (>= 3) license;
+\item the AGPL (>= 3) license (\code{\link[=use_kpkg_license]{use_kpkg_license()}});
 \item roxygen2 with markdown, testthat (3rd edition), \code{README.md} and
 \code{NEWS.md};
 \item a \code{.lintr} limiting lines to 80 characters (\code{\link[=use_kpkg_lintr]{use_kpkg_lintr()}});

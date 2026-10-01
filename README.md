@@ -41,10 +41,14 @@ use_kpkg_github()   # .github/workflows/R-CMD-check.yaml et pkgdown.yaml
 use_kpkg_gitlab()   # .gitlab-ci.yml
 use_kpkg_pkgdown()  # _pkgdown.yml (site main à la racine, dev dans /dev)
 use_kpkg_lintr()    # .lintr, lignes de 80 caractères au plus
+use_kpkg_license()  # licence AGPL (>= 3) : DESCRIPTION et LICENSE.md
 
 # Mettre à jour les fichiers après une mise à jour de kpkg.r
 use_kpkg_github(overwrite = TRUE)
 use_kpkg_gitlab(overwrite = TRUE)
+
+# Package créé avec une version antérieure (licence MIT) : passer à l'AGPL
+use_kpkg_license()
 ```
 
 Chaque fichier d'intégration continue copié commence par la version de

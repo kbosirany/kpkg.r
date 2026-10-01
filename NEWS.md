@@ -2,6 +2,12 @@
 
 * `create_pkg()` utilise maintenant la licence AGPL (>= 3) au lieu de MIT :
   `License: AGPL (>= 3)` et `LICENSE.md` (plus de fichier `LICENSE`).
+* Nouvelle fonction `use_kpkg_license()` : applique la licence AGPL (>= 3) à un
+  package existant, par exemple créé avec une version antérieure de kpkg.r
+  (licence MIT). Elle ne remplace que les licences posées par kpkg.r
+  (`MIT + file LICENSE` ou le texte provisoire de usethis) sauf avec
+  `overwrite = TRUE`.
+* kpkg.r passe lui-même sous licence AGPL (>= 3).
 
 # kpkg.r 0.1.0
 

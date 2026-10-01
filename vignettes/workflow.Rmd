@@ -30,6 +30,23 @@ Le package est créé en version `0.0.0.9000`, avec :
 - un `_pkgdown.yml` ;
 - les workflows GitHub Actions et le `.gitlab-ci.yml`.
 
+## Mettre à jour un package existant
+
+Après une mise à jour de kpkg.r, les fichiers d'un package déjà créé se
+mettent à jour avec les fonctions `use_kpkg_*()` (`overwrite = TRUE` pour
+remplacer un fichier existant). La licence suit la même logique :
+
+```{r}
+use_kpkg_license()
+```
+
+La licence passe de `MIT + file LICENSE` à `AGPL (>= 3)` : `DESCRIPTION` et
+`LICENSE.md` sont mis à jour et le fichier `LICENSE` (année et titulaire du
+copyright de la licence MIT) est supprimé. Une autre licence n'est remplacée
+qu'avec `use_kpkg_license(overwrite = TRUE)` : changer la licence d'un package
+est une décision de ses titulaires de droits. Les mentions de l'ancienne
+licence dans le reste du package (README, en-têtes) sont à vérifier à la main.
+
 ## Branches et versions
 
 - `main` ne contient que des versions publiées (`0.1.0`, `0.1.1`, ...).

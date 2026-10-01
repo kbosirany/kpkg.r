@@ -15,13 +15,16 @@ test_that("use_kpkg_github() copies the workflows with a version header", {
   path <- local_pkg()
   msgs <- capture_messages(files <- use_kpkg_github())
   expect_match(msgs, "R-CMD-check.yaml", all = FALSE)
-  expect_length(files, 2)
+  expect_length(files, 3)
   check <- read_file(file.path(path, ".github/workflows/R-CMD-check.yaml"))
   expect_match(
     check[1],
     paste0("^# Template kpkg.r ", packageVersion("kpkg.r"))
   )
   expect_true(file.exists(file.path(path, ".github/workflows/pkgdown.yaml")))
+  expect_true(
+    file.exists(file.path(path, ".github/workflows/test-coverage.yaml"))
+  )
   expect_true("^\\.github$" %in% read_file(file.path(path, ".Rbuildignore")))
 })
 

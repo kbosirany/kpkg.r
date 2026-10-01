@@ -4,7 +4,10 @@
 \alias{use_kpkg_github}
 \title{Add the GitHub Actions workflows}
 \usage{
-use_kpkg_github(workflows = c("R-CMD-check", "pkgdown"), overwrite = FALSE)
+use_kpkg_github(
+  workflows = c("R-CMD-check", "pkgdown", "test-coverage"),
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{workflows}{Workflows to add.}
@@ -27,6 +30,8 @@ requests.
 branch, the site of \code{main} at the root and the site of \code{dev} in \verb{/dev}.
 It runs \code{dev/build_site.R}, see \code{\link[=use_kpkg_site_scripts]{use_kpkg_site_scripts()}}, which also
 renders the Quarto books of \verb{reports/} in the site.
+\item \code{test-coverage}: test coverage with covr, uploaded to Codecov (secret
+\code{CODECOV_TOKEN}), for the coverage badge of \code{\link[=use_kpkg_readme]{use_kpkg_readme()}}.
 }
 }
 \examples{

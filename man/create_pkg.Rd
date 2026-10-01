@@ -51,8 +51,8 @@ A wrapper around \code{\link[usethis:create_package]{usethis::create_package()}}
 \item the author (\code{\link[=kpkg_author]{kpkg_author()}}) in \code{Authors@R};
 \item the \code{URL} and \code{BugReports} fields for a GitHub repository;
 \item the MIT license, with the author as copyright holder;
-\item roxygen2 with markdown, testthat (3rd edition), \code{README.md} and
-\code{NEWS.md};
+\item roxygen2 with markdown, testthat (3rd edition) and \code{NEWS.md};
+\item a \code{README.Rmd} with the badges (\code{\link[=use_kpkg_readme]{use_kpkg_readme()}});
 \item a \code{.lintr} limiting lines to 80 characters (\code{\link[=use_kpkg_lintr]{use_kpkg_lintr()}});
 \item a \verb{_pkgdown.yml} (\code{\link[=use_kpkg_pkgdown]{use_kpkg_pkgdown()}});
 \item the continuous integration for GitHub (\code{\link[=use_kpkg_github]{use_kpkg_github()}}) and/or

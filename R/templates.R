@@ -17,28 +17,34 @@ kpkg_templates <- function() {
     template = c(
       "github/R-CMD-check.yaml",
       "github/pkgdown.yaml",
+      "github/test-coverage.yaml",
       "gitlab/gitlab-ci.yml",
       "project/_pkgdown.yml",
       "project/build_site.R",
       "project/render_reports.R",
+      "project/README.Rmd",
       "project/lintr"
     ),
     target = c(
       ".github/workflows/R-CMD-check.yaml",
       ".github/workflows/pkgdown.yaml",
+      ".github/workflows/test-coverage.yaml",
       ".gitlab-ci.yml",
       "_pkgdown.yml",
       "dev/build_site.R",
       "dev/render_reports.R",
+      "README.Rmd",
       ".lintr"
     ),
     fun = c(
+      "use_kpkg_github",
       "use_kpkg_github",
       "use_kpkg_github",
       "use_kpkg_gitlab",
       "use_kpkg_pkgdown",
       "use_kpkg_site_scripts",
       "use_kpkg_site_scripts",
+      "use_kpkg_readme",
       "use_kpkg_lintr"
     ),
     stringsAsFactors = FALSE
@@ -56,6 +62,8 @@ kpkg_templates <- function() {
 #'   branch, the site of `main` at the root and the site of `dev` in `/dev`.
 #'   It runs `dev/build_site.R`, see [use_kpkg_site_scripts()], which also
 #'   renders the Quarto books of `reports/` in the site.
+#' * `test-coverage`: test coverage with covr, uploaded to Codecov (secret
+#'   `CODECOV_TOKEN`), for the coverage badge of [use_kpkg_readme()].
 #'
 #' @param workflows Workflows to add.
 #' @param overwrite Whether to replace existing files, e.g. to update them
@@ -70,7 +78,8 @@ kpkg_templates <- function() {
 #' # Update the workflows after updating kpkg.r
 #' use_kpkg_github(overwrite = TRUE)
 #' }
-use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown"),
+use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown",
+                                          "test-coverage"),
                             overwrite = FALSE) {
   workflows <- match.arg(workflows, several.ok = TRUE)
   usethis::use_build_ignore("^\\.github$", escape = FALSE)
@@ -94,6 +103,8 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown"),
 #'
 #' * `check`: `R CMD check` with R release and R devel (Docker images
 #'   `rocker/r-ver`), on every branch.
+#' * `coverage`: test coverage with covr. GitLab reads the percentage in the
+#'   log for the coverage badge of [use_kpkg_readme()].
 #' * `pages`: pkgdown site with GitLab Pages, the site of `main` at the root
 #'   and the site of `dev` in `/dev`. As GitLab Pages only keeps the last
 #'   deployment, the job builds both branches every time. It runs

@@ -1,5 +1,13 @@
 # kpkg.r (development version)
 
+* `use_kpkg_readme()` ajoute un `README.Rmd` (et `README.md`) avec les badges
+  principaux, et `use_kpkg_badges()` met à jour le bloc de badges d'un README
+  existant : pipeline ou `R-CMD-check`, couverture de tests, cycle de vie et
+  licence, selon les dépôts GitHub et GitLab de l'URL de `DESCRIPTION`.
+  `create_pkg()` ajoute le README.
+* Couverture de tests avec covr : workflow GitHub `test-coverage` (Codecov) et
+  job GitLab `coverage` (badge `coverage.svg` de GitLab).
+
 * `use_kpkg_site_scripts()` ajoute `dev/build_site.R` et
   `dev/render_reports.R` : le site pkgdown est construit, puis les livres
   Quarto de `reports/` sont rendus dans `<site>/reports/<livre>/` (chemin

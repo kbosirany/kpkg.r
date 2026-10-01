@@ -3,6 +3,7 @@
 #
 # - check: R CMD check with the released and the development version of R,
 #   on every branch and tag.
+# - coverage: test coverage with covr (coverage badge of the README).
 # - pages: pkgdown site with GitLab Pages. GitLab Pages only keeps the last
 #   deployment, so the job builds both branches every time: main at the root
 #   of the site and dev in /dev (same layout as on GitHub Pages).
@@ -46,6 +47,29 @@ check:
     paths:
       - check
     expire_in: 1 week
+
+# Test coverage with covr. GitLab reads the percentage in the log (`coverage`
+# regex) for the badge of the README, and the cobertura report for the
+# coverage of the merge requests.
+coverage:
+  extends: .r-setup
+  stage: check
+  variables:
+    R_VERSION: "latest"
+  script:
+    - Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
+    - Rscript -e 'pak::pkg_install("covr")'
+    - |
+      Rscript -e '
+        cov <- covr::package_coverage()
+        print(cov)
+        covr::to_cobertura(cov, filename = "cobertura.xml")'
+  coverage: '/Coverage: \d+(?:\.\d+)?%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: cobertura.xml
 
 pages:
   extends: .r-setup

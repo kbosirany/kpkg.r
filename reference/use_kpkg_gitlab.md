@@ -26,6 +26,10 @@ The path of the file written, invisibly.
 - `check`: `R CMD check` with R release and R devel (Docker images
   `rocker/r-ver`), on every branch.
 
+- `coverage`: test coverage with covr. GitLab reads the percentage in
+  the log for the coverage badge of
+  [`use_kpkg_readme()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md).
+
 - `pages`: pkgdown site with GitLab Pages, the site of `main` at the
   root and the site of `dev` in `/dev`. As GitLab Pages only keeps the
   last deployment, the job builds both branches every time. It runs

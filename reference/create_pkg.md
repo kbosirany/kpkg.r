@@ -72,8 +72,10 @@ The path of the package, invisibly.
 
 - the MIT license, with the author as copyright holder;
 
-- roxygen2 with markdown, testthat (3rd edition), `README.md` and
-  `NEWS.md`;
+- roxygen2 with markdown, testthat (3rd edition) and `NEWS.md`;
+
+- a `README.Rmd` with the badges
+  ([`use_kpkg_readme()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md));
 
 - a `.lintr` limiting lines to 80 characters
   ([`use_kpkg_lintr()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_lintr.md));

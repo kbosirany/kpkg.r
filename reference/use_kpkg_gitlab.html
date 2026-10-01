@@ -67,6 +67,8 @@ to the templates of the installed kpkg.r version.</p></dd>
 
 <ul><li><p><code>check</code>: <code>R CMD check</code> with R release and R devel (Docker images
 <code>rocker/r-ver</code>), on every branch.</p></li>
+<li><p><code>coverage</code>: test coverage with covr. GitLab reads the percentage in the
+log for the coverage badge of <code><a href="use_kpkg_readme.html">use_kpkg_readme()</a></code>.</p></li>
 <li><p><code>pages</code>: pkgdown site with GitLab Pages, the site of <code>main</code> at the root
 and the site of <code>dev</code> in <code>/dev</code>. As GitLab Pages only keeps the last
 deployment, the job builds both branches every time. It runs

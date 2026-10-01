@@ -58,7 +58,8 @@ coverage:
     R_VERSION: "latest"
   script:
     - Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
-    - Rscript -e 'pak::pkg_install("covr")'
+    # xml2 is needed by covr::to_cobertura()
+    - Rscript -e 'pak::pkg_install(c("covr", "xml2"))'
     - |
       Rscript -e '
         cov <- covr::package_coverage()

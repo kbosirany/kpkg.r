@@ -2,6 +2,12 @@
 
 ## kpkg.r (development version)
 
+- `dev/render_reports.R` installe, en CI, les paquets utilisés par le
+  code des rapports ([`library()`](https://rdrr.io/r/base/library.html),
+  [`require()`](https://rdrr.io/r/base/library.html), `pkg::`) qui ne
+  sont pas installés ; hors CI, il avertit seulement. Plus besoin de les
+  déclarer dans `Suggests` pour que le job `pages` rende les rapports.
+
 - [`use_kpkg_readme()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md)
   ajoute un `README.Rmd` (et `README.md`) avec les badges principaux, et
   [`use_kpkg_badges()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md)

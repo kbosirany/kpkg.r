@@ -70,10 +70,13 @@ The path of the package, invisibly.
 
 - the `URL` and `BugReports` fields for a GitHub repository;
 
-- the MIT license, with the author as copyright holder;
+- the AGPL (\>= 3) license
+  ([`use_kpkg_license()`](https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_license.md));
 
-- roxygen2 with markdown, testthat (3rd edition), `README.md` and
-  `NEWS.md`;
+- roxygen2 with markdown, testthat (3rd edition) and `NEWS.md`;
+
+- a `README.Rmd` with the badges
+  ([`use_kpkg_readme()`](https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_readme.md));
 
 - a `.lintr` limiting lines to 80 characters
   ([`use_kpkg_lintr()`](https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_lintr.md));

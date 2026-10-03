@@ -76,7 +76,8 @@ et les templates <code>use_kpkg_*()</code> supposent.</p>
 <span><span class="fu"><a href="../reference/create_pkg.html">create_pkg</a></span><span class="op">(</span><span class="st">"~/projets/monpkg"</span>, title <span class="op">=</span> <span class="st">"Do Something Useful"</span><span class="op">)</span></span></code></pre></div>
 <p>Le package est créé en version <code>0.0.0.9000</code>, avec :</p>
 <ul>
-<li>l’auteur de <code><a href="../reference/kpkg_author.html">kpkg_author()</a></code> et la licence MIT ;</li>
+<li>l’auteur de <code><a href="../reference/kpkg_author.html">kpkg_author()</a></code> et la licence AGPL (&gt;= 3)
+;</li>
 <li>roxygen2 (markdown), testthat (3e édition), <code>README.md</code>,
 <code>NEWS.md</code> ;</li>
 <li>un <code>.lintr</code> qui limite les lignes à 80 caractères
@@ -84,6 +85,80 @@ et les templates <code>use_kpkg_*()</code> supposent.</p>
 <li>un <code>_pkgdown.yml</code> ;</li>
 <li>les workflows GitHub Actions et le <code>.gitlab-ci.yml</code>.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="mettre-à-jour-un-package-existant">Mettre à jour un package existant<a class="anchor" aria-label="anchor" href="#mettre-%C3%A0-jour-un-package-existant"></a>
+</h2>
+<p>Après une mise à jour de kpkg.r, les fichiers d’un package déjà créé
+se mettent à jour avec les fonctions <code>use_kpkg_*()</code>
+(<code>overwrite = TRUE</code> pour remplacer un fichier existant). La
+licence suit la même logique :</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_kpkg_license.html">use_kpkg_license</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>La licence passe de <code>MIT + file LICENSE</code> à
+<code>AGPL (&gt;= 3)</code> : <code>DESCRIPTION</code> et
+<code>LICENSE.md</code> sont mis à jour et le fichier
+<code>LICENSE</code> (année et titulaire du copyright de la licence MIT)
+est supprimé. Une autre licence n’est remplacée qu’avec
+<code>use_kpkg_license(overwrite = TRUE)</code> : changer la licence
+d’un package est une décision de ses titulaires de droits. Les mentions
+de l’ancienne licence dans le reste du package (README, en-têtes) sont à
+vérifier à la main.</p>
+</div>
+<div class="section level2">
+<h2 id="badges-et-couverture-de-tests">Badges et couverture de tests<a class="anchor" aria-label="anchor" href="#badges-et-couverture-de-tests"></a>
+</h2>
+<p><code><a href="../reference/use_kpkg_readme.html">use_kpkg_readme()</a></code> (nouveau package) et
+<code><a href="../reference/use_kpkg_readme.html">use_kpkg_badges()</a></code> (package existant, même sans
+<code>README.Rmd</code>) écrivent le bloc de badges du README entre
+<code>&lt;!-- badges: start --&gt;</code> et
+<code>&lt;!-- badges: end --&gt;</code>. Les badges dépendent des dépôts
+de l’URL de <code>DESCRIPTION</code> :</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Forge</th>
+<th>Badges</th>
+<th>Alimentés par</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>GitHub</td>
+<td>
+<code>R-CMD-check</code>, Codecov</td>
+<td>workflows <code>R-CMD-check</code> et
+<code>test-coverage</code>
+</td>
+</tr>
+<tr class="even">
+<td>GitLab (tout autre hôte)</td>
+<td>pipeline, coverage</td>
+<td>jobs <code>check</code> et <code>coverage</code> du
+<code>.gitlab-ci.yml</code>
+</td>
+</tr>
+<tr class="odd">
+<td>les deux</td>
+<td>cycle de vie, licence</td>
+<td>
+<code>lifecycle</code> et champ <code>License</code>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Package existant : ajouter la couverture et mettre à jour les badges</span></span>
+<span><span class="fu"><a href="../reference/use_kpkg_github.html">use_kpkg_github</a></span><span class="op">(</span><span class="st">"test-coverage"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/use_kpkg_readme.html">use_kpkg_badges</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Un badge sans l’intégration correspondante reste vide : le badge de
+couverture GitHub demande le workflow <code>test-coverage</code>
+<strong>et</strong> le réglage manuel de Codecov ci-dessous. Sur GitLab,
+aucun réglage n’est nécessaire : le job <code>coverage</code> publie le
+pourcentage lu dans son journal.</p>
 </div>
 <div class="section level2">
 <h2 id="branches-et-versions">Branches et versions<a class="anchor" aria-label="anchor" href="#branches-et-versions"></a>
@@ -104,7 +179,7 @@ de <code>dev</code> dans <code>/dev</code> (mode de développement
 <p>Les numéros de version se gèrent avec
 <code><a href="https://usethis.r-lib.org/reference/use_version.html" class="external-link">usethis::use_version()</a></code>, qui met à jour
 <code>DESCRIPTION</code> et <code>NEWS.md</code> :</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_version.html" class="external-link">use_version</a></span><span class="op">(</span><span class="st">"patch"</span><span class="op">)</span> <span class="co"># 0.1.0.9000 -&gt; 0.1.1</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_version.html" class="external-link">use_version</a></span><span class="op">(</span><span class="st">"minor"</span><span class="op">)</span> <span class="co"># 0.1.0.9000 -&gt; 0.2.0</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_version.html" class="external-link">use_version</a></span><span class="op">(</span><span class="st">"dev"</span><span class="op">)</span>   <span class="co"># 0.1.1      -&gt; 0.1.1.9000</span></span></code></pre></div>
@@ -155,6 +230,14 @@ commits</strong> coché.</li>
 <li>Sur la page d’accueil du dépôt, roue dentée de
 <strong>About</strong> : cocher <strong>Use your GitHub Pages
 website</strong> pour afficher l’adresse du site.</li>
+<li>Couverture de tests (badge Codecov) : se connecter à <a href="https://app.codecov.io" class="external-link uri">https://app.codecov.io</a>
+avec GitHub, ajouter le dépôt, puis copier son jeton dans
+<strong>Settings</strong> &gt; <strong>Secrets and variables</strong>
+&gt; <strong>Actions</strong> &gt; <strong>New repository
+secret</strong>, nom <code>CODECOV_TOKEN</code>. Tant que le secret
+manque, le job <code>test-coverage</code> échoue sur les push vers
+<code>main</code> et <code>dev</code> (mais pas sur les pull requests)
+et le badge reste vide.</li>
 </ol>
 </div>
 <div class="section level2">

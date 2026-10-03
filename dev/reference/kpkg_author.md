@@ -1,9 +1,8 @@
 # Default package author
 
 The author written in the `Authors@R` field of the packages created with
-[`create_pkg()`](https://kbosirany.github.io/kpkg.r/dev/reference/create_pkg.md),
-and the copyright holder of their MIT license. Another author can be
-used by setting the option `kpkg.r.author` to a
+[`create_pkg()`](https://kbosirany.github.io/kpkg.r/dev/reference/create_pkg.md).
+Another author can be used by setting the option `kpkg.r.author` to a
 [`utils::person()`](https://rdrr.io/r/utils/person.html), e.g. in your
 `.Rprofile`.
 

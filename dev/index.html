@@ -60,7 +60,7 @@
 
 <!-- badges: end -->
 <p>Site : <a href="https://kbosirany.github.io/kpkg.r/" class="uri">https://kbosirany.github.io/kpkg.r/</a> (version en développement : <a href="https://kbosirany.github.io/kpkg.r/dev/">/dev</a>)</p>
-<p>Un compagnon personnel de <a href="https://usethis.r-lib.org" class="external-link">usethis</a> : créer des packages R avec mes conventions (auteur, licence MIT, roxygen2, testthat, lignes de 80 caractères) et ajouter des templates d’intégration continue versionnés, pour GitHub Actions comme pour GitLab CI.</p>
+<p>Un compagnon personnel de <a href="https://usethis.r-lib.org" class="external-link">usethis</a> : créer des packages R avec mes conventions (auteur, licence AGPL, roxygen2, testthat, lignes de 80 caractères) et ajouter des templates d’intégration continue versionnés, pour GitHub Actions comme pour GitLab CI.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -74,7 +74,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kbosirany/kpkg.r" class="external-link">kpkg.r</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Nouveau package : DESCRIPTION, licence MIT, tests, README, NEWS,</span></span>
+<span><span class="co"># Nouveau package : DESCRIPTION, licence AGPL, tests, README, NEWS,</span></span>
 <span><span class="co"># .lintr, _pkgdown.yml, workflows GitHub et .gitlab-ci.yml</span></span>
 <span><span class="fu"><a href="reference/create_pkg.html">create_pkg</a></span><span class="op">(</span><span class="st">"~/projets/monpkg"</span>, title <span class="op">=</span> <span class="st">"Do Something Useful"</span><span class="op">)</span></span>
 <span></span>
@@ -86,10 +86,19 @@
 <span><span class="fu"><a href="reference/use_kpkg_gitlab.html">use_kpkg_gitlab</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># .gitlab-ci.yml</span></span>
 <span><span class="fu"><a href="reference/use_kpkg_pkgdown.html">use_kpkg_pkgdown</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># _pkgdown.yml (site main à la racine, dev dans /dev)</span></span>
 <span><span class="fu"><a href="reference/use_kpkg_lintr.html">use_kpkg_lintr</a></span><span class="op">(</span><span class="op">)</span>    <span class="co"># .lintr, lignes de 80 caractères au plus</span></span>
+<span><span class="fu"><a href="reference/use_kpkg_license.html">use_kpkg_license</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># licence AGPL (&gt;= 3) : DESCRIPTION et LICENSE.md</span></span>
+<span><span class="fu"><a href="reference/use_kpkg_readme.html">use_kpkg_readme</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># README.Rmd avec badges (pipeline, couverture, ...)</span></span>
+<span><span class="fu"><a href="reference/use_kpkg_readme.html">use_kpkg_badges</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># met à jour les badges d'un README existant</span></span>
+<span><span class="co"># dev/build_site.R et dev/render_reports.R : site pkgdown et livres Quarto</span></span>
+<span><span class="co"># de reports/ (liens vers les rapports)</span></span>
+<span><span class="fu"><a href="reference/use_kpkg_site_scripts.html">use_kpkg_site_scripts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Mettre à jour les fichiers après une mise à jour de kpkg.r</span></span>
 <span><span class="fu"><a href="reference/use_kpkg_github.html">use_kpkg_github</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/use_kpkg_gitlab.html">use_kpkg_gitlab</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/use_kpkg_gitlab.html">use_kpkg_gitlab</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Package créé avec une version antérieure (licence MIT) : passer à l'AGPL</span></span>
+<span><span class="fu"><a href="reference/use_kpkg_license.html">use_kpkg_license</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Chaque fichier d’intégration continue copié commence par la version de kpkg.r dont il provient (<code># Template kpkg.r 0.1.0: ...</code>). <code><a href="reference/kpkg_templates.html">kpkg_templates()</a></code> liste les templates disponibles.</p>
 <p>L’auteur par défaut est donné par <code><a href="reference/kpkg_author.html">kpkg_author()</a></code> ; pour en utiliser un autre, définir l’option <code>kpkg.r.author</code> (par exemple dans <code>.Rprofile</code>) :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -112,7 +121,7 @@
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small>AGPL (&gt;= 3)</small></li>
 </ul>
 </div>
 

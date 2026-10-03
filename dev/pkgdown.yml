@@ -3,7 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   workflow: workflow.html
-last_built: 2026-09-29T23:17Z
+last_built: 2026-10-03T07:55Z
 urls:
   reference: https://kbosirany.github.io/kpkg.r/reference
   article: https://kbosirany.github.io/kpkg.r/articles

@@ -1,5 +1,4 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>https://kbosirany.github.io/kpkg.r/dev/LICENSE-text.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/LICENSE.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/articles/index.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/articles/workflow.html</loc></url>
@@ -13,7 +12,10 @@
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/kpkg_templates.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_github.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_gitlab.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_license.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_lintr.html</loc></url>
 <url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_pkgdown.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_readme.html</loc></url>
+<url><loc>https://kbosirany.github.io/kpkg.r/dev/reference/use_kpkg_site_scripts.html</loc></url>
 </urlset>
 

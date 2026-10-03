@@ -38,7 +38,16 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kpkgr-development-version">kpkg.r (development version)<a class="anchor" aria-label="anchor" href="#kpkgr-development-version"></a></h2>
-</div>
+<ul><li><p><code>dev/render_reports.R</code> installe, en CI, les paquets utilisés par le code des rapports (<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>, <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code>, <code>pkg::</code>) qui ne sont pas installés ; hors CI, il avertit seulement. Plus besoin de les déclarer dans <code>Suggests</code> pour que le job <code>pages</code> rende les rapports.</p></li>
+<li><p><code><a href="../reference/use_kpkg_readme.html">use_kpkg_readme()</a></code> ajoute un <code>README.Rmd</code> (et <code>README.md</code>) avec les badges principaux, et <code><a href="../reference/use_kpkg_readme.html">use_kpkg_badges()</a></code> met à jour le bloc de badges d’un README existant : pipeline ou <code>R-CMD-check</code>, couverture de tests, cycle de vie et licence, selon les dépôts GitHub et GitLab de l’URL de <code>DESCRIPTION</code>. <code><a href="../reference/create_pkg.html">create_pkg()</a></code> ajoute le README.</p></li>
+<li><p>Couverture de tests avec covr : workflow GitHub <code>test-coverage</code> (Codecov) et job GitLab <code>coverage</code> (badge <code>coverage.svg</code> de GitLab).</p></li>
+<li><p><code><a href="../reference/use_kpkg_site_scripts.html">use_kpkg_site_scripts()</a></code> ajoute <code>dev/build_site.R</code> et <code>dev/render_reports.R</code> : le site pkgdown est construit, puis les livres Quarto de <code>reports/</code> sont rendus dans <code>&lt;site&gt;/reports/&lt;livre&gt;/</code> (chemin absolu) avec l’entrée <code>Reports [fr]</code> dans la navbar. Cela corrige les liens vers les rapports qui donnaient une erreur 404 sur le site du package.</p></li>
+<li><p>Le workflow GitHub <code>pkgdown</code> et le job GitLab <code>pages</code> lancent <code>dev/build_site.R</code> (et installent le CLI Quarto et le package quarto quand <code>reports/</code> contient un livre). <code><a href="../reference/use_kpkg_github.html">use_kpkg_github()</a></code>, <code><a href="../reference/use_kpkg_gitlab.html">use_kpkg_gitlab()</a></code> et <code><a href="../reference/use_kpkg_pkgdown.html">use_kpkg_pkgdown()</a></code> ajoutent les scripts.</p></li>
+<li><p><code><a href="../reference/create_pkg.html">create_pkg()</a></code> utilise maintenant la licence AGPL (&gt;= 3) au lieu de MIT : <code>License: AGPL (&gt;= 3)</code> et <code>LICENSE.md</code> (plus de fichier <code>LICENSE</code>).</p></li>
+<li><p>Nouvelle fonction <code><a href="../reference/use_kpkg_license.html">use_kpkg_license()</a></code> : applique la licence AGPL (&gt;= 3) à un package existant, par exemple créé avec une version antérieure de kpkg.r (licence MIT). Elle ne remplace que les licences posées par kpkg.r (<code>MIT + file LICENSE</code> ou le texte provisoire de usethis) sauf avec <code>overwrite = TRUE</code>.</p></li>
+<li><p>kpkg.r passe lui-même sous licence AGPL (&gt;= 3).</p></li>
+<li><p>La vignette <code>workflow</code> décrit les badges (GitHub et GitLab), la couverture de tests et le réglage manuel de Codecov.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="kpkgr-010">kpkg.r 0.1.0<a class="anchor" aria-label="anchor" href="#kpkgr-010"></a></h2>
 <ul><li>Première version.</li>

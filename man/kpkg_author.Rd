@@ -11,9 +11,8 @@ A \code{\link[utils:person]{utils::person()}} object.
 }
 \description{
 The author written in the \code{Authors@R} field of the packages created with
-\code{\link[=create_pkg]{create_pkg()}}, and the copyright holder of their MIT license. Another
-author can be used by setting the option \code{kpkg.r.author} to a
-\code{\link[utils:person]{utils::person()}}, e.g. in your \code{.Rprofile}.
+\code{\link[=create_pkg]{create_pkg()}}. Another author can be used by setting the option
+\code{kpkg.r.author} to a \code{\link[utils:person]{utils::person()}}, e.g. in your \code{.Rprofile}.
 }
 \examples{
 kpkg_author()

@@ -3,6 +3,7 @@
 #
 # - check: R CMD check with the released and the development version of R,
 #   on every branch and tag.
+# - coverage: test coverage with covr (coverage badge of the README).
 # - pages: pkgdown site with GitLab Pages. GitLab Pages only keeps the last
 #   deployment, so the job builds both branches every time: main at the root
 #   of the site and dev in /dev (same layout as on GitHub Pages).
@@ -22,6 +23,7 @@ variables:
   before_script:
     - apt-get update -qq
     - apt-get install -y -qq --no-install-recommends pandoc qpdf git
+        libcurl4-openssl-dev libssl-dev libxml2-dev pkg-config
     - Rscript -e 'install.packages("pak")'
 
 check:
@@ -46,6 +48,30 @@ check:
       - check
     expire_in: 1 week
 
+# Test coverage with covr. GitLab reads the percentage in the log (`coverage`
+# regex) for the badge of the README, and the cobertura report for the
+# coverage of the merge requests.
+coverage:
+  extends: .r-setup
+  stage: check
+  variables:
+    R_VERSION: "latest"
+  script:
+    - Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
+    # xml2 is needed by covr::to_cobertura()
+    - Rscript -e 'pak::pkg_install(c("covr", "xml2"))'
+    - |
+      Rscript -e '
+        cov <- covr::package_coverage()
+        print(cov)
+        covr::to_cobertura(cov, filename = "cobertura.xml")'
+  coverage: '/Coverage: \d+(?:\.\d+)?%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: cobertura.xml
+
 pages:
   extends: .r-setup
   stage: deploy
@@ -55,7 +81,12 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
   script:
-    - Rscript -e 'pak::pkg_install("pkgdown")'
+    - Rscript -e 'pak::pkg_install(c("pkgdown", "quarto"))'
+    # Quarto CLI, to render the books of `reports/` (rocker images script)
+    - |
+      if ls reports/*/_quarto.yml > /dev/null 2>&1; then
+        /rocker_scripts/install_quarto.sh
+      fi
     - git fetch --quiet origin main
     - git fetch --quiet origin dev || echo "No dev branch"
     - |
@@ -64,14 +95,12 @@ pages:
         git worktree add --force "/tmp/src-$1" "origin/$1"
         cd "/tmp/src-$1"
         Rscript -e 'pak::local_install_dev_deps()'
-        PKGDOWN_DEV_MODE="$2" KPKG_DEST="/tmp/site-$1" Rscript -e '
-          pkgdown::build_site(
-            new_process = FALSE,
-            override = list(
-              destination = Sys.getenv("KPKG_DEST"),
-              url = Sys.getenv("CI_PAGES_URL")
-            )
-          )'
+        # the reports may use the package of the branch
+        R CMD INSTALL .
+        # builds the site and renders the reports in it (dev/build_site.R of
+        # the pipeline, so that it also builds a branch that has no script)
+        PKGDOWN_DEV_MODE="$2" KPKG_DEST="/tmp/site-$1" \
+          Rscript "$CI_PROJECT_DIR/dev/build_site.R"
         cd "$CI_PROJECT_DIR"
       }
       build_branch main release

@@ -16,7 +16,7 @@ Description: A personal companion to 'usethis': create R packages with a
     versioned continuous integration templates for 'GitHub Actions' and
     'GitLab CI' (package check and 'pkgdown' site with a released and a
     development version).
-License: MIT + file LICENSE
+License: AGPL (>= 3)
 URL: https://github.com/kbosirany/kpkg.r,
     https://kbosirany.github.io/kpkg.r/
 BugReports: https://github.com/kbosirany/kpkg.r/issues
@@ -26,6 +26,7 @@ Imports:
     usethis (>= 2.2.0),
     utils
 Suggests:
+    devtools,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

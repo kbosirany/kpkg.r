@@ -1,9 +1,8 @@
 #' Default package author
 #'
 #' The author written in the `Authors@R` field of the packages created with
-#' [create_pkg()], and the copyright holder of their MIT license. Another
-#' author can be used by setting the option `kpkg.r.author` to a
-#' [utils::person()], e.g. in your `.Rprofile`.
+#' [create_pkg()]. Another author can be used by setting the option
+#' `kpkg.r.author` to a [utils::person()], e.g. in your `.Rprofile`.
 #'
 #' @return A [utils::person()] object.
 #' @export
@@ -35,14 +34,6 @@ default_author <- function() {
     role = c("aut", "cre"),
     comment = c(ORCID = "0009-0009-2784-3108")
   )
-}
-
-# Full name of the maintainer, used as copyright holder of the license
-author_name <- function(author) {
-  persons <- lapply(seq_along(author), function(i) author[[i]])
-  cre <- vapply(persons, function(p) "cre" %in% p$role, logical(1))
-  person <- persons[[if (any(cre)) which(cre)[1] else 1L]]
-  paste(c(person$given, person$family), collapse = " ")
 }
 
 # `Authors@R` field, one argument per line to stay under 80 characters

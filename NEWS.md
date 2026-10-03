@@ -1,4 +1,4 @@
-# kpkg.r 0.1.0.9000
+# kpkg.r (development version)
 
 * `dev/render_reports.R` installe, en CI, les paquets utilisés par le code des
   rapports (`library()`, `require()`, `pkg::`) qui ne sont pas installés ;

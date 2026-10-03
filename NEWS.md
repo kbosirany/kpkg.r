@@ -31,6 +31,8 @@
   (`MIT + file LICENSE` ou le texte provisoire de usethis) sauf avec
   `overwrite = TRUE`.
 * kpkg.r passe lui-même sous licence AGPL (>= 3).
+* La vignette `workflow` décrit les badges (GitHub et GitLab), la couverture de
+  tests et le réglage manuel de Codecov.
 
 # kpkg.r 0.1.0
 

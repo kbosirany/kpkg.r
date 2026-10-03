@@ -47,6 +47,30 @@ qu'avec `use_kpkg_license(overwrite = TRUE)` : changer la licence d'un package
 est une décision de ses titulaires de droits. Les mentions de l'ancienne
 licence dans le reste du package (README, en-têtes) sont à vérifier à la main.
 
+## Badges et couverture de tests
+
+`use_kpkg_readme()` (nouveau package) et `use_kpkg_badges()` (package
+existant, même sans `README.Rmd`) écrivent le bloc de badges du README entre
+`<!-- badges: start -->` et `<!-- badges: end -->`. Les badges dépendent des
+dépôts de l'URL de `DESCRIPTION` :
+
+| Forge | Badges | Alimentés par |
+|---|---|---|
+| GitHub | `R-CMD-check`, Codecov | workflows `R-CMD-check` et `test-coverage` |
+| GitLab (tout autre hôte) | pipeline, coverage | jobs `check` et `coverage` du `.gitlab-ci.yml` |
+| les deux | cycle de vie, licence | `lifecycle` et champ `License` |
+
+```{r}
+# Package existant : ajouter la couverture et mettre à jour les badges
+use_kpkg_github("test-coverage")
+use_kpkg_badges()
+```
+
+Un badge sans l'intégration correspondante reste vide : le badge de
+couverture GitHub demande le workflow `test-coverage` **et** le réglage
+manuel de Codecov ci-dessous. Sur GitLab, aucun réglage n'est nécessaire : le
+job `coverage` publie le pourcentage lu dans son journal.
+
 ## Branches et versions
 
 - `main` ne contient que des versions publiées (`0.1.0`, `0.1.1`, ...).
@@ -94,6 +118,12 @@ usethis::use_version("dev")   # 0.1.1      -> 0.1.1.9000
    `R-CMD-check`).
 4. Sur la page d'accueil du dépôt, roue dentée de **About** : cocher
    **Use your GitHub Pages website** pour afficher l'adresse du site.
+5. Couverture de tests (badge Codecov) : se connecter à
+   <https://app.codecov.io> avec GitHub, ajouter le dépôt, puis copier son
+   jeton dans **Settings** > **Secrets and variables** > **Actions** > **New
+   repository secret**, nom `CODECOV_TOKEN`. Tant que le secret manque, le
+   job `test-coverage` échoue sur les push vers `main` et `dev` (mais pas sur
+   les pull requests) et le badge reste vide.
 
 ## Réglages manuels côté GitLab
 

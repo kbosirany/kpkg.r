@@ -6,7 +6,8 @@ test_that("use_kpkg_license() replaces the usethis placeholder", {
   path <- local_pkg()
   expect_match(license_field(path), "use_mit_license", fixed = TRUE)
   res <- use_kpkg_license()
-  expect_equal(res, file.path(path, "LICENSE.md"))
+  # normalised: on macOS the temporary folder is a symbolic link
+  expect_equal(normalizePath(res), normalizePath(file.path(path, "LICENSE.md")))
   expect_equal(license_field(path), "AGPL (>= 3)")
   expect_true(
     "GNU Affero General Public License" %in%

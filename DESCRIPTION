@@ -26,6 +26,7 @@ Imports:
     usethis (>= 2.2.0),
     utils
 Suggests:
+    devtools,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

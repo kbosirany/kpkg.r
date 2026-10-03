@@ -1,0 +1,26 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file, then
+run devtools::build_readme(). -->
+
+# {{package}}
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+{{description}}
+
+## Installation
+
+```r
+# install.packages("pak")
+{{install}}
+```
+
+## Usage
+
+```r
+library({{package}})
+```

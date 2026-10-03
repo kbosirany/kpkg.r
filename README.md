@@ -42,6 +42,11 @@ use_kpkg_gitlab()   # .gitlab-ci.yml
 use_kpkg_pkgdown()  # _pkgdown.yml (site main à la racine, dev dans /dev)
 use_kpkg_lintr()    # .lintr, lignes de 80 caractères au plus
 use_kpkg_license()  # licence AGPL (>= 3) : DESCRIPTION et LICENSE.md
+use_kpkg_readme()   # README.Rmd avec badges (pipeline, couverture, ...)
+use_kpkg_badges()   # met à jour les badges d'un README existant
+# dev/build_site.R et dev/render_reports.R : site pkgdown et livres Quarto
+# de reports/ (liens vers les rapports)
+use_kpkg_site_scripts()
 
 # Mettre à jour les fichiers après une mise à jour de kpkg.r
 use_kpkg_github(overwrite = TRUE)

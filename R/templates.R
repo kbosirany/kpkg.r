@@ -17,22 +17,34 @@ kpkg_templates <- function() {
     template = c(
       "github/R-CMD-check.yaml",
       "github/pkgdown.yaml",
+      "github/test-coverage.yaml",
       "gitlab/gitlab-ci.yml",
       "project/_pkgdown.yml",
+      "project/build_site.R",
+      "project/render_reports.R",
+      "project/README.Rmd",
       "project/lintr"
     ),
     target = c(
       ".github/workflows/R-CMD-check.yaml",
       ".github/workflows/pkgdown.yaml",
+      ".github/workflows/test-coverage.yaml",
       ".gitlab-ci.yml",
       "_pkgdown.yml",
+      "dev/build_site.R",
+      "dev/render_reports.R",
+      "README.Rmd",
       ".lintr"
     ),
     fun = c(
       "use_kpkg_github",
       "use_kpkg_github",
+      "use_kpkg_github",
       "use_kpkg_gitlab",
       "use_kpkg_pkgdown",
+      "use_kpkg_site_scripts",
+      "use_kpkg_site_scripts",
+      "use_kpkg_readme",
       "use_kpkg_lintr"
     ),
     stringsAsFactors = FALSE
@@ -48,6 +60,10 @@ kpkg_templates <- function() {
 #'   requests.
 #' * `pkgdown`: builds the pkgdown site and deploys it on the `gh-pages`
 #'   branch, the site of `main` at the root and the site of `dev` in `/dev`.
+#'   It runs `dev/build_site.R`, see [use_kpkg_site_scripts()], which also
+#'   renders the Quarto books of `reports/` in the site.
+#' * `test-coverage`: test coverage with covr, uploaded to Codecov (secret
+#'   `CODECOV_TOKEN`), for the coverage badge of [use_kpkg_readme()].
 #'
 #' @param workflows Workflows to add.
 #' @param overwrite Whether to replace existing files, e.g. to update them
@@ -62,10 +78,14 @@ kpkg_templates <- function() {
 #' # Update the workflows after updating kpkg.r
 #' use_kpkg_github(overwrite = TRUE)
 #' }
-use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown"),
+use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown",
+                                          "test-coverage"),
                             overwrite = FALSE) {
   workflows <- match.arg(workflows, several.ok = TRUE)
   usethis::use_build_ignore("^\\.github$", escape = FALSE)
+  if ("pkgdown" %in% workflows) {
+    use_kpkg_site_scripts()
+  }
   written <- vapply(workflows, function(w) {
     copy_template(
       file.path("github", paste0(w, ".yaml")),
@@ -83,9 +103,13 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown"),
 #'
 #' * `check`: `R CMD check` with R release and R devel (Docker images
 #'   `rocker/r-ver`), on every branch.
+#' * `coverage`: test coverage with covr. GitLab reads the percentage in the
+#'   log for the coverage badge of [use_kpkg_readme()].
 #' * `pages`: pkgdown site with GitLab Pages, the site of `main` at the root
 #'   and the site of `dev` in `/dev`. As GitLab Pages only keeps the last
-#'   deployment, the job builds both branches every time.
+#'   deployment, the job builds both branches every time. It runs
+#'   `dev/build_site.R`, see [use_kpkg_site_scripts()], which also renders
+#'   the Quarto books of `reports/` in the site.
 #'
 #' @inheritParams use_kpkg_github
 #' @return The path of the file written, invisibly.
@@ -96,6 +120,7 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown"),
 #' }
 use_kpkg_gitlab <- function(overwrite = FALSE) {
   usethis::use_build_ignore(".gitlab-ci.yml")
+  use_kpkg_site_scripts()
   written <- copy_template(
     "gitlab/gitlab-ci.yml", ".gitlab-ci.yml",
     overwrite = overwrite
@@ -126,11 +151,49 @@ use_kpkg_pkgdown <- function(url = NULL, lang = "fr", overwrite = FALSE) {
   }
   usethis::use_build_ignore(c("_pkgdown.yml", "docs", "pkgdown"))
   usethis::use_git_ignore("docs")
+  use_kpkg_site_scripts()
   written <- copy_template(
     "project/_pkgdown.yml", "_pkgdown.yml",
     data = list(url = url, lang = lang),
     overwrite = overwrite
   )
+  invisible(written[!is.na(written)])
+}
+
+#' Add the scripts that build the pkgdown site
+#'
+#' Copies into `dev/` the scripts run by the CI to build the site (the
+#' workflow of [use_kpkg_github()] and the job of [use_kpkg_gitlab()]):
+#'
+#' * `dev/build_site.R`: builds the pkgdown site, then renders the reports in
+#'   it. The folder of the site is `KPKG_DEST` (default `docs`). It adds the
+#'   navbar entries of the reports, `Reports [fr]` for the books ending with
+#'   `-fr`, to those of `_pkgdown.yml`.
+#' * `dev/render_reports.R`: renders each Quarto book of `reports/` (a folder
+#'   with a `_quarto.yml`) in `<site>/reports/<book>/`, with an absolute
+#'   output path, and checks that its `index.html` is there. Without it, a
+#'   book rendered by `quarto render` lands in the book folder, and the link
+#'   of the navbar to the report gives a 404 error.
+#'
+#' The scripts are also the way to build the site locally:
+#' `Rscript dev/build_site.R`. They need the Quarto CLI and the quarto R
+#' package when there are books.
+#'
+#' @inheritParams use_kpkg_github
+#' @return The paths of the files written, invisibly.
+#' @export
+#' @examples
+#' \dontrun{
+#' use_kpkg_site_scripts()
+#' }
+use_kpkg_site_scripts <- function(overwrite = FALSE) {
+  usethis::use_build_ignore("^dev$", escape = FALSE)
+  written <- vapply(c("build_site.R", "render_reports.R"), function(script) {
+    copy_template(
+      file.path("project", script), file.path("dev", script),
+      overwrite = overwrite
+    )
+  }, character(1))
   invisible(written[!is.na(written)])
 }
 

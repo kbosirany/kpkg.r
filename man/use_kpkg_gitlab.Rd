@@ -21,9 +21,13 @@ workflows of \code{\link[=use_kpkg_github]{use_kpkg_github()}}:
 \itemize{
 \item \code{check}: \verb{R CMD check} with R release and R devel (Docker images
 \code{rocker/r-ver}), on every branch.
+\item \code{coverage}: test coverage with covr. GitLab reads the percentage in the
+log for the coverage badge of \code{\link[=use_kpkg_readme]{use_kpkg_readme()}}.
 \item \code{pages}: pkgdown site with GitLab Pages, the site of \code{main} at the root
 and the site of \code{dev} in \verb{/dev}. As GitLab Pages only keeps the last
-deployment, the job builds both branches every time.
+deployment, the job builds both branches every time. It runs
+\code{dev/build_site.R}, see \code{\link[=use_kpkg_site_scripts]{use_kpkg_site_scripts()}}, which also renders
+the Quarto books of \verb{reports/} in the site.
 }
 }
 \examples{

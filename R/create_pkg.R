@@ -5,8 +5,8 @@
 #' * the author ([kpkg_author()]) in `Authors@R`;
 #' * the `URL` and `BugReports` fields for a GitHub repository;
 #' * the AGPL (>= 3) license ([use_kpkg_license()]);
-#' * roxygen2 with markdown, testthat (3rd edition), `README.md` and
-#'   `NEWS.md`;
+#' * roxygen2 with markdown, testthat (3rd edition) and `NEWS.md`;
+#' * a `README.Rmd` with the badges ([use_kpkg_readme()]);
 #' * a `.lintr` limiting lines to 80 characters ([use_kpkg_lintr()]);
 #' * a `_pkgdown.yml` ([use_kpkg_pkgdown()]);
 #' * the continuous integration for GitHub ([use_kpkg_github()]) and/or
@@ -84,10 +84,10 @@ create_pkg <- function(path,
 
   use_kpkg_license()
   usethis::use_testthat(3)
-  usethis::use_readme_md(open = FALSE)
   usethis::use_news_md(open = FALSE)
   use_kpkg_lintr()
   use_kpkg_pkgdown(lang = lang)
+  use_kpkg_readme()
   if ("github" %in% ci) {
     use_kpkg_github()
   }

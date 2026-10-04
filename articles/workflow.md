@@ -16,12 +16,58 @@ Le package est créé en version `0.0.0.9000`, avec :
 
 - l’auteur de
   [`kpkg_author()`](https://kbosirany.github.io/kpkg.r/reference/kpkg_author.md)
-  et la licence MIT ;
+  et la licence AGPL (\>= 3) ;
 - roxygen2 (markdown), testthat (3e édition), `README.md`, `NEWS.md` ;
 - un `.lintr` qui limite les lignes à 80 caractères
   (`lintr::lint_package()` pour vérifier) ;
 - un `_pkgdown.yml` ;
 - les workflows GitHub Actions et le `.gitlab-ci.yml`.
+
+## Mettre à jour un package existant
+
+Après une mise à jour de kpkg.r, les fichiers d’un package déjà créé se
+mettent à jour avec les fonctions `use_kpkg_*()` (`overwrite = TRUE`
+pour remplacer un fichier existant). La licence suit la même logique :
+
+``` r
+
+use_kpkg_license()
+```
+
+La licence passe de `MIT + file LICENSE` à `AGPL (>= 3)` : `DESCRIPTION`
+et `LICENSE.md` sont mis à jour et le fichier `LICENSE` (année et
+titulaire du copyright de la licence MIT) est supprimé. Une autre
+licence n’est remplacée qu’avec `use_kpkg_license(overwrite = TRUE)` :
+changer la licence d’un package est une décision de ses titulaires de
+droits. Les mentions de l’ancienne licence dans le reste du package
+(README, en-têtes) sont à vérifier à la main.
+
+## Badges et couverture de tests
+
+[`use_kpkg_readme()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md)
+(nouveau package) et
+[`use_kpkg_badges()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_readme.md)
+(package existant, même sans `README.Rmd`) écrivent le bloc de badges du
+README entre `<!-- badges: start -->` et `<!-- badges: end -->`. Les
+badges dépendent des dépôts de l’URL de `DESCRIPTION` :
+
+| Forge | Badges | Alimentés par |
+|----|----|----|
+| GitHub | `R-CMD-check`, Codecov | workflows `R-CMD-check` et `test-coverage` |
+| GitLab (tout autre hôte) | pipeline, coverage | jobs `check` et `coverage` du `.gitlab-ci.yml` |
+| les deux | cycle de vie, licence | `lifecycle` et champ `License` |
+
+``` r
+
+# Package existant : ajouter la couverture et mettre à jour les badges
+use_kpkg_github("test-coverage")
+use_kpkg_badges()
+```
+
+Un badge sans l’intégration correspondante reste vide : le badge de
+couverture GitHub demande le workflow `test-coverage` **et** le réglage
+manuel de Codecov ci-dessous. Sur GitLab, aucun réglage n’est nécessaire
+: le job `coverage` publie le pourcentage lu dans son journal.
 
 ## Branches et versions
 
@@ -73,6 +119,13 @@ usethis::use_version("dev")   # 0.1.1      -> 0.1.1.9000
     (ajouter les jobs `R-CMD-check`).
 4.  Sur la page d’accueil du dépôt, roue dentée de **About** : cocher
     **Use your GitHub Pages website** pour afficher l’adresse du site.
+5.  Couverture de tests (badge Codecov) : se connecter à
+    <https://app.codecov.io> avec GitHub, ajouter le dépôt, puis copier
+    son jeton dans **Settings** \> **Secrets and variables** \>
+    **Actions** \> **New repository secret**, nom `CODECOV_TOKEN`. Tant
+    que le secret manque, le job `test-coverage` échoue sur les push
+    vers `main` et `dev` (mais pas sur les pull requests) et le badge
+    reste vide.
 
 ## Réglages manuels côté GitLab
 

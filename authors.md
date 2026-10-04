@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/kbosirany/kpkg.r/blob/main/DESCRIPTION)
 
 Orlando KB (2026). *kpkg.r: Create R Packages with Personal
-Conventions*. R package version 0.1.0,
+Conventions*. R package version 0.2.0,
 <https://github.com/kbosirany/kpkg.r>.
 
     @Manual{,
       title = {kpkg.r: Create R Packages with Personal Conventions},
       author = {Kevin Bosirany Orlando},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://github.com/kbosirany/kpkg.r},
     }

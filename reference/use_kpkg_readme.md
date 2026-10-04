@@ -48,11 +48,13 @@ the repositories found in the `URL` field of `DESCRIPTION`:
 
 - lifecycle and license.
 
-`README.md` is rebuilt with `devtools::build_readme()` when `README.Rmd`
-has R code, else with
+`README.md` is rebuilt with
+[`devtools::build_readme()`](https://devtools.r-lib.org/reference/build_readme.html)
+when `README.Rmd` has R code, else with
 [`rmarkdown::render()`](https://pkgs.rstudio.com/rmarkdown/reference/render.html)
 when Pandoc is available. Otherwise, it is the text of `README.Rmd` and
-is rebuilt by `devtools::build_readme()`.
+is rebuilt by
+[`devtools::build_readme()`](https://devtools.r-lib.org/reference/build_readme.html).
 
 ## Examples
 

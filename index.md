@@ -4,7 +4,7 @@ Site : <https://kbosirany.github.io/kpkg.r/> (version en développement :
 [/dev](https://kbosirany.github.io/kpkg.r/dev/))
 
 Un compagnon personnel de [usethis](https://usethis.r-lib.org) : créer
-des packages R avec mes conventions (auteur, licence MIT, roxygen2,
+des packages R avec mes conventions (auteur, licence AGPL, roxygen2,
 testthat, lignes de 80 caractères) et ajouter des templates
 d’intégration continue versionnés, pour GitHub Actions comme pour GitLab
 CI.
@@ -23,7 +23,7 @@ pak::pak("kbosirany/kpkg.r")
 
 library(kpkg.r)
 
-# Nouveau package : DESCRIPTION, licence MIT, tests, README, NEWS,
+# Nouveau package : DESCRIPTION, licence AGPL, tests, README, NEWS,
 # .lintr, _pkgdown.yml, workflows GitHub et .gitlab-ci.yml
 create_pkg("~/projets/monpkg", title = "Do Something Useful")
 
@@ -35,6 +35,7 @@ use_kpkg_github()   # .github/workflows/R-CMD-check.yaml et pkgdown.yaml
 use_kpkg_gitlab()   # .gitlab-ci.yml
 use_kpkg_pkgdown()  # _pkgdown.yml (site main à la racine, dev dans /dev)
 use_kpkg_lintr()    # .lintr, lignes de 80 caractères au plus
+use_kpkg_license()  # licence AGPL (>= 3) : DESCRIPTION et LICENSE.md
 use_kpkg_readme()   # README.Rmd avec badges (pipeline, couverture, ...)
 use_kpkg_badges()   # met à jour les badges d'un README existant
 # dev/build_site.R et dev/render_reports.R : site pkgdown et livres Quarto
@@ -44,6 +45,9 @@ use_kpkg_site_scripts()
 # Mettre à jour les fichiers après une mise à jour de kpkg.r
 use_kpkg_github(overwrite = TRUE)
 use_kpkg_gitlab(overwrite = TRUE)
+
+# Package créé avec une version antérieure (licence MIT) : passer à l'AGPL
+use_kpkg_license()
 ```
 
 Chaque fichier d’intégration continue copié commence par la version de

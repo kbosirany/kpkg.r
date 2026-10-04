@@ -1,6 +1,6 @@
 # Changelog
 
-## kpkg.r (development version)
+## kpkg.r 0.2.0
 
 - `dev/render_reports.R` installe, en CI, les paquets utilisés par le
   code des rapports ([`library()`](https://rdrr.io/r/base/library.html),
@@ -35,6 +35,22 @@
   et
   [`use_kpkg_pkgdown()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_pkgdown.md)
   ajoutent les scripts.
+
+- [`create_pkg()`](https://kbosirany.github.io/kpkg.r/reference/create_pkg.md)
+  utilise maintenant la licence AGPL (\>= 3) au lieu de MIT :
+  `License: AGPL (>= 3)` et `LICENSE.md` (plus de fichier `LICENSE`).
+
+- Nouvelle fonction
+  [`use_kpkg_license()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_license.md)
+  : applique la licence AGPL (\>= 3) à un package existant, par exemple
+  créé avec une version antérieure de kpkg.r (licence MIT). Elle ne
+  remplace que les licences posées par kpkg.r (`MIT + file LICENSE` ou
+  le texte provisoire de usethis) sauf avec `overwrite = TRUE`.
+
+- kpkg.r passe lui-même sous licence AGPL (\>= 3).
+
+- La vignette `workflow` décrit les badges (GitHub et GitLab), la
+  couverture de tests et le réglage manuel de Codecov.
 
 ## kpkg.r 0.1.0
 

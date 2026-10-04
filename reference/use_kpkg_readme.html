@@ -11,7 +11,7 @@ and a usage section, then adds the badges with use_kpkg_badges()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">kpkg.r</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,10 +84,10 @@ the repositories found in the <code>URL</code> field of <code>DESCRIPTION</code>
 <li><p>GitLab repository (any other host): pipeline and coverage, see
 <code><a href="use_kpkg_gitlab.html">use_kpkg_gitlab()</a></code>;</p></li>
 <li><p>lifecycle and license.</p></li>
-</ul><p><code>README.md</code> is rebuilt with <code>devtools::build_readme()</code> when <code>README.Rmd</code>
+</ul><p><code>README.md</code> is rebuilt with <code><a href="https://devtools.r-lib.org/reference/build_readme.html" class="external-link">devtools::build_readme()</a></code> when <code>README.Rmd</code>
 has R code, else with <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">rmarkdown::render()</a></code> when Pandoc is available.
 Otherwise, it is the text of <code>README.Rmd</code> and is rebuilt by
-<code>devtools::build_readme()</code>.</p>
+<code><a href="https://devtools.r-lib.org/reference/build_readme.html" class="external-link">devtools::build_readme()</a></code>.</p>
     </div>
 
     <div class="section level2">

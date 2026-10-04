@@ -70,7 +70,8 @@ The path of the package, invisibly.
 
 - the `URL` and `BugReports` fields for a GitHub repository;
 
-- the MIT license, with the author as copyright holder;
+- the AGPL (\>= 3) license
+  ([`use_kpkg_license()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_license.md));
 
 - roxygen2 with markdown, testthat (3rd edition) and `NEWS.md`;
 

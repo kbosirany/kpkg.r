@@ -12,6 +12,8 @@
   : Add the GitHub Actions workflows
 - [`use_kpkg_gitlab()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_gitlab.md)
   : Add the GitLab CI configuration
+- [`use_kpkg_license()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_license.md)
+  : Set the kpkg.r license on a package
 - [`use_kpkg_lintr()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_lintr.md)
   : Add a lintr configuration
 - [`use_kpkg_pkgdown()`](https://kbosirany.github.io/kpkg.r/reference/use_kpkg_pkgdown.md)

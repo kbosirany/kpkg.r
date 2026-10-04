@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kpkg.r</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="kpkgr-development-version">kpkg.r (development version)<a class="anchor" aria-label="anchor" href="#kpkgr-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="kpkgr-020">kpkg.r 0.2.0<a class="anchor" aria-label="anchor" href="#kpkgr-020"></a></h2>
 <ul><li><p><code>dev/render_reports.R</code> installe, en CI, les paquets utilisés par le code des rapports (<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>, <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code>, <code>pkg::</code>) qui ne sont pas installés ; hors CI, il avertit seulement. Plus besoin de les déclarer dans <code>Suggests</code> pour que le job <code>pages</code> rende les rapports.</p></li>
 <li><p><code><a href="../reference/use_kpkg_readme.html">use_kpkg_readme()</a></code> ajoute un <code>README.Rmd</code> (et <code>README.md</code>) avec les badges principaux, et <code><a href="../reference/use_kpkg_readme.html">use_kpkg_badges()</a></code> met à jour le bloc de badges d’un README existant : pipeline ou <code>R-CMD-check</code>, couverture de tests, cycle de vie et licence, selon les dépôts GitHub et GitLab de l’URL de <code>DESCRIPTION</code>. <code><a href="../reference/create_pkg.html">create_pkg()</a></code> ajoute le README.</p></li>
 <li><p>Couverture de tests avec covr : workflow GitHub <code>test-coverage</code> (Codecov) et job GitLab <code>coverage</code> (badge <code>coverage.svg</code> de GitLab).</p></li>

@@ -1,3 +1,5 @@
+# kpkg.r (development version)
+
 # kpkg.r 0.2.0
 
 * `dev/render_reports.R` installe, en CI, les paquets utilisés par le code des

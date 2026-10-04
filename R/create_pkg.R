@@ -4,7 +4,7 @@
 #'
 #' * the author ([kpkg_author()]) in `Authors@R`;
 #' * the `URL` and `BugReports` fields for a GitHub repository;
-#' * the MIT license, with the author as copyright holder;
+#' * the AGPL (>= 3) license ([use_kpkg_license()]);
 #' * roxygen2 with markdown, testthat (3rd edition) and `NEWS.md`;
 #' * a `README.Rmd` with the badges ([use_kpkg_readme()]);
 #' * a `.lintr` limiting lines to 80 characters ([use_kpkg_lintr()]);
@@ -82,7 +82,7 @@ create_pkg <- function(path,
   )
   usethis::local_project(path, quiet = TRUE)
 
-  usethis::use_mit_license(copyright_holder = author_name(author))
+  use_kpkg_license()
   usethis::use_testthat(3)
   usethis::use_news_md(open = FALSE)
   use_kpkg_lintr()

@@ -1,4 +1,4 @@
-# kpkg.r (development version)
+# kpkg.r 0.2.0
 
 * `dev/render_reports.R` installe, en CI, les paquets utilisés par le code des
   rapports (`library()`, `require()`, `pkg::`) qui ne sont pas installés ;
@@ -22,6 +22,17 @@
   `dev/build_site.R` (et installent le CLI Quarto et le package quarto quand
   `reports/` contient un livre). `use_kpkg_github()`, `use_kpkg_gitlab()` et
   `use_kpkg_pkgdown()` ajoutent les scripts.
+
+* `create_pkg()` utilise maintenant la licence AGPL (>= 3) au lieu de MIT :
+  `License: AGPL (>= 3)` et `LICENSE.md` (plus de fichier `LICENSE`).
+* Nouvelle fonction `use_kpkg_license()` : applique la licence AGPL (>= 3) à un
+  package existant, par exemple créé avec une version antérieure de kpkg.r
+  (licence MIT). Elle ne remplace que les licences posées par kpkg.r
+  (`MIT + file LICENSE` ou le texte provisoire de usethis) sauf avec
+  `overwrite = TRUE`.
+* kpkg.r passe lui-même sous licence AGPL (>= 3).
+* La vignette `workflow` décrit les badges (GitHub et GitLab), la couverture de
+  tests et le réglage manuel de Codecov.
 
 # kpkg.r 0.1.0
 

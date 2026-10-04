@@ -30,7 +30,7 @@ if (nzchar(Sys.getenv("CI_PAGES_URL"))) {
 pkg <- pkgdown::as_pkgdown(".", override = override)
 pkg <- pkgdown::as_pkgdown(
   ".",
-  override = utils::modifyList(override, reports_navbar(pkg) %||% list())
+  override = utils::modifyList(override, null_or(reports_navbar(pkg), list()))
 )
 
 # 2. Build the site

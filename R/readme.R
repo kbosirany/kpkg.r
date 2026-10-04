@@ -248,19 +248,25 @@ repo_info <- function(path) {
   )
   pattern <- "^https://([^/]+)/([^/]+(?:/[^/]+)*?)/?$"
   for (url in grep(pattern, urls, value = TRUE, perl = TRUE)) {
-    host <- sub(pattern, "\\1", url, perl = TRUE)
-    repo <- sub(pattern, "\\2", url, perl = TRUE)
-    if (grepl("(github|gitlab)\\.io$|\\.pages", host)) {
-      next
+    info <- add_repo_url(info, url, pattern)
+  }
+  info
+}
+
+# Adds the GitHub or GitLab repository of `url` to `info`, if it has none yet
+add_repo_url <- function(info, url, pattern) {
+  host <- sub(pattern, "\\1", url, perl = TRUE)
+  repo <- sub(pattern, "\\2", url, perl = TRUE)
+  if (grepl("(github|gitlab)\\.io$|\\.pages", host)) {
+    return(info)
+  }
+  if (host == "github.com") {
+    parts <- strsplit(repo, "/")[[1]]
+    if (length(parts) == 2 && is.null(info$github)) {
+      info$github <- list(owner = parts[1], repo = parts[2])
     }
-    if (host == "github.com") {
-      parts <- strsplit(repo, "/")[[1]]
-      if (length(parts) == 2 && is.null(info$github)) {
-        info$github <- list(owner = parts[1], repo = parts[2])
-      }
-    } else if (grepl("/", repo) && is.null(info$gitlab)) {
-      info$gitlab <- list(host = host, path = repo)
-    }
+  } else if (grepl("/", repo) && is.null(info$gitlab)) {
+    info$gitlab <- list(host = host, path = repo)
   }
   info
 }
@@ -270,12 +276,13 @@ build_readme_md <- function(path) {
   rmd <- file.path(path, "README.Rmd")
   md <- file.path(path, "README.md")
   has_code <- any(grepl("^```\\{r", readLines(rmd, warn = FALSE)))
+  can_render <- requireNamespace("rmarkdown", quietly = TRUE) &&
+    rmarkdown::pandoc_available()
   if (has_code && requireNamespace("devtools", quietly = TRUE)) {
     # the code of the README uses the package: it is installed first
     devtools::build_readme(path, quiet = TRUE)
     message("Wrote README.md (devtools::build_readme())")
-  } else if (requireNamespace("rmarkdown", quietly = TRUE) &&
-        rmarkdown::pandoc_available()) {
+  } else if (can_render) {
     rmarkdown::render(
       rmd,
       output_format = rmarkdown::github_document(html_preview = FALSE),

@@ -10,7 +10,8 @@
 # `<site>/reports/<book>/`, where the navbar of the site links to it (see
 # `reports_navbar()`). Needs the Quarto CLI and the quarto R package.
 
-`%||%` <- function(x, y) if (is.null(x)) y else x
+# `x`, or `default` if `x` is NULL
+null_or <- function(x, default) if (is.null(x)) default else x
 
 # Folder names of the books
 list_reports <- function(path = "reports") {
@@ -136,7 +137,7 @@ reports_navbar <- function(pkg, path = "reports") {
   books <- list_reports(path)
   navbar <- pkg$meta$navbar
   linked <- unlist(lapply(navbar$components, function(x) {
-    vapply(x$menu, function(item) item$href %||% "", character(1))
+    vapply(x$menu, function(item) null_or(item$href, ""), character(1))
   }))
   books <- books[!vapply(books, function(book) {
     any(startsWith(linked, file.path("reports", book, "")))

@@ -2,6 +2,12 @@
 
 ## kpkg.r (development version)
 
+- `dev/render_reports.R` : les rapports forment un seul menu `Reports`
+  dans la barre de navigation, avec un en-tête par langue (`English`,
+  `Français`, d’après le suffixe `-en`/`-fr` du dossier) quand il y a
+  plusieurs langues, sans en-tête sinon. Remplace les menus `reports_fr`
+  et `reports_en`.
+
 ## kpkg.r 0.2.0
 
 - `dev/render_reports.R` installe, en CI, les paquets utilisés par le

@@ -38,7 +38,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kpkgr-development-version">kpkg.r (development version)<a class="anchor" aria-label="anchor" href="#kpkgr-development-version"></a></h2>
-</div>
+<ul><li>
+<code>dev/render_reports.R</code> : les rapports forment un seul menu <code>Reports</code> dans la barre de navigation, avec un en-tête par langue (<code>English</code>, <code>Français</code>, d’après le suffixe <code>-en</code>/<code>-fr</code> du dossier) quand il y a plusieurs langues, sans en-tête sinon. Remplace les menus <code>reports_fr</code> et <code>reports_en</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="kpkgr-020">kpkg.r 0.2.0<a class="anchor" aria-label="anchor" href="#kpkgr-020"></a></h2>
 <ul><li><p><code>dev/render_reports.R</code> installe, en CI, les paquets utilisés par le code des rapports (<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>, <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code>, <code>pkg::</code>) qui ne sont pas installés ; hors CI, il avertit seulement. Plus besoin de les déclarer dans <code>Suggests</code> pour que le job <code>pages</code> rende les rapports.</p></li>

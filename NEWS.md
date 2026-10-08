@@ -1,5 +1,11 @@
 # kpkg.r (development version)
 
+* Template `gitlab/gitlab-ci.yml` : `pak` est installé depuis les binaires de
+  r-lib (`https://r-lib.github.io/p/pak/stable/...`) au lieu de
+  `install.packages("pak")`, avec repli sur CRAN. Avec R-devel, qui n'a pas de
+  binaires sur CRAN, `pak` était compilé depuis les sources (environ 3 minutes
+  par job `check`).
+
 * `dev/render_reports.R` : les rapports forment un seul menu `Reports` dans la
   barre de navigation, avec un en-tête par langue (`English`, `Français`,
   d'après le suffixe `-en`/`-fr` du dossier) quand il y a plusieurs langues,

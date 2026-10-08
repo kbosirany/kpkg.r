@@ -38,8 +38,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kpkgr-development-version">kpkg.r (development version)<a class="anchor" aria-label="anchor" href="#kpkgr-development-version"></a></h2>
-<ul><li>
-<code>dev/render_reports.R</code> : les rapports forment un seul menu <code>Reports</code> dans la barre de navigation, avec un en-tête par langue (<code>English</code>, <code>Français</code>, d’après le suffixe <code>-en</code>/<code>-fr</code> du dossier) quand il y a plusieurs langues, sans en-tête sinon. Remplace les menus <code>reports_fr</code> et <code>reports_en</code>.</li>
+<ul><li><p>Template <code>gitlab/gitlab-ci.yml</code> : <code>pak</code> est installé depuis les binaires de r-lib (<code>https://r-lib.github.io/p/pak/stable/...</code>) au lieu de <code>install.packages("pak")</code>, avec repli sur CRAN. Avec R-devel, qui n’a pas de binaires sur CRAN, <code>pak</code> était compilé depuis les sources (environ 3 minutes par job <code>check</code>).</p></li>
+<li><p>Template <code>gitlab/gitlab-ci.yml</code> : le job <code>check</code> ne teste plus que la version publiée de R sur toutes les branches. R-devel est dans un job <code>check-devel</code> (lent : sans binaires, les paquets sont compilés), qui ne tourne que sur <code>dev</code> et <code>main</code> et ne bloque pas le pipeline (<code>allow_failure</code>). Le job <code>coverage</code> est inchangé.</p></li>
+<li><p><code>dev/render_reports.R</code> : les rapports forment un seul menu <code>Reports</code> dans la barre de navigation, avec un en-tête par langue (<code>English</code>, <code>Français</code>, d’après le suffixe <code>-en</code>/<code>-fr</code> du dossier) quand il y a plusieurs langues, sans en-tête sinon. Remplace les menus <code>reports_fr</code> et <code>reports_en</code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="kpkgr-020">kpkg.r 0.2.0<a class="anchor" aria-label="anchor" href="#kpkgr-020"></a></h2>

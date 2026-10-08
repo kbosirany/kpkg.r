@@ -1,5 +1,17 @@
 # kpkg.r (development version)
 
+* Template `gitlab/gitlab-ci.yml` : `pak` est installé depuis les binaires de
+  r-lib (`https://r-lib.github.io/p/pak/stable/...`) au lieu de
+  `install.packages("pak")`, avec repli sur CRAN. Avec R-devel, qui n'a pas de
+  binaires sur CRAN, `pak` était compilé depuis les sources (environ 3 minutes
+  par job `check`).
+
+* Template `gitlab/gitlab-ci.yml` : le job `check` ne teste plus que la version
+  publiée de R sur toutes les branches. R-devel est dans un job `check-devel`
+  (lent : sans binaires, les paquets sont compilés), qui ne tourne que sur
+  `dev` et `main` et ne bloque pas le pipeline (`allow_failure`). Le job
+  `coverage` est inchangé.
+
 * `dev/render_reports.R` : les rapports forment un seul menu `Reports` dans la
   barre de navigation, avec un en-tête par langue (`English`, `Français`,
   d'après le suffixe `-en`/`-fr` du dossier) quand il y a plusieurs langues,

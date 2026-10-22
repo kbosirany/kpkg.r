@@ -153,10 +153,10 @@ reports_menu <- function(lang, titles, hrefs) {
 
 # Navbar entry of the books, as a pkgdown `override` list: one menu,
 # `reports`, with the title of each book, and a header by language (the
-# `-en` or `-fr` end of the folder name) when there are several languages (see
-# `reports_menu()`). A component `reports` already defined in `_pkgdown.yml` is
-# kept as it is, and the books that the components already link to get no
-# entry. `NULL` if there is nothing to add.
+# `_en` or `_fr` end of the folder name, or `-en`/`-fr`) when there are
+# several languages (see `reports_menu()`). A component `reports` already
+# defined in `_pkgdown.yml` is kept as it is, and the books that the
+# components already link to get no entry. `NULL` if there is nothing to add.
 reports_navbar <- function(pkg, path = "reports") {
   books <- list_reports(path)
   navbar <- pkg$meta$navbar
@@ -170,7 +170,7 @@ reports_navbar <- function(pkg, path = "reports") {
     return(NULL)
   }
   lang <- ifelse(
-    grepl("-(fr|en)$", books), sub(".*-(fr|en)$", "\\1", books), ""
+    grepl("[-_](fr|en)$", books), sub(".*[-_](fr|en)$", "\\1", books), ""
   )
   titles <- vapply(books, function(book) {
     title <- yaml::read_yaml(file.path(path, book, "_quarto.yml"))$book$title

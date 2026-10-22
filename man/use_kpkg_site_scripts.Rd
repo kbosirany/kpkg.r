@@ -22,7 +22,7 @@ workflow of \code{\link[=use_kpkg_github]{use_kpkg_github()}} and the job of \co
 \item \code{dev/build_site.R}: builds the pkgdown site, then renders the reports in
 it. The folder of the site is \code{KPKG_DEST} (default \code{docs}). It adds the
 navbar entries of the reports, \code{Reports [fr]} for the books ending with
-\code{-fr}, to those of \verb{_pkgdown.yml}.
+\verb{_fr} (or \code{-fr}), to those of \verb{_pkgdown.yml}.
 \item \code{dev/render_reports.R}: renders each Quarto book of \verb{reports/} (a folder
 with a \verb{_quarto.yml}) in \verb{<site>/reports/<book>/}, with an absolute
 output path, and checks that its \code{index.html} is there. Without it, a

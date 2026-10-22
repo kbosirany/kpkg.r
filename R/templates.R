@@ -168,7 +168,7 @@ use_kpkg_pkgdown <- function(url = NULL, lang = "fr", overwrite = FALSE) {
 #' * `dev/build_site.R`: builds the pkgdown site, then renders the reports in
 #'   it. The folder of the site is `KPKG_DEST` (default `docs`). It adds the
 #'   navbar entries of the reports, `Reports [fr]` for the books ending with
-#'   `-fr`, to those of `_pkgdown.yml`.
+#'   `_fr` (or `-fr`), to those of `_pkgdown.yml`.
 #' * `dev/render_reports.R`: renders each Quarto book of `reports/` (a folder
 #'   with a `_quarto.yml`) in `<site>/reports/<book>/`, with an absolute
 #'   output path, and checks that its `index.html` is there. Without it, a

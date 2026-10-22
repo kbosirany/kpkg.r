@@ -28,7 +28,7 @@ The paths of the files written, invisibly.
 - `dev/build_site.R`: builds the pkgdown site, then renders the reports
   in it. The folder of the site is `KPKG_DEST` (default `docs`). It adds
   the navbar entries of the reports, `Reports [fr]` for the books ending
-  with `-fr`, to those of `_pkgdown.yml`.
+  with `_fr` (or `-fr`), to those of `_pkgdown.yml`.
 
 - `dev/render_reports.R`: renders each Quarto book of `reports/` (a
   folder with a `_quarto.yml`) in `<site>/reports/<book>/`, with an

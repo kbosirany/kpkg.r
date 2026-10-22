@@ -68,7 +68,7 @@ to the templates of the installed kpkg.r version.</p></dd>
 <ul><li><p><code>dev/build_site.R</code>: builds the pkgdown site, then renders the reports in
 it. The folder of the site is <code>KPKG_DEST</code> (default <code>docs</code>). It adds the
 navbar entries of the reports, <code>Reports [fr]</code> for the books ending with
-<code>-fr</code>, to those of <code>_pkgdown.yml</code>.</p></li>
+<code>_fr</code> (or <code>-fr</code>), to those of <code>_pkgdown.yml</code>.</p></li>
 <li><p><code>dev/render_reports.R</code>: renders each Quarto book of <code>reports/</code> (a folder
 with a <code>_quarto.yml</code>) in <code>&lt;site&gt;/reports/&lt;book&gt;/</code>, with an absolute
 output path, and checks that its <code>index.html</code> is there. Without it, a

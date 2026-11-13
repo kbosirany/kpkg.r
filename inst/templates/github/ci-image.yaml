@@ -16,7 +16,8 @@ on:
 
 name: ci-image
 
-permissions: read-all
+# No workflow-level permissions: a called workflow cannot request more than
+# the calling job grants (contents: read, packages: write)
 
 jobs:
   ci-image:

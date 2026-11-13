@@ -19,8 +19,13 @@ workflows of \code{\link[=use_kpkg_github]{use_kpkg_github()}}:
 }
 \details{
 \itemize{
-\item \code{check}: \verb{R CMD check} with R release and R devel (Docker images
-\code{rocker/r-ver}), on every branch.
+\item \code{ci-image}: images of the jobs, built from the \code{Dockerfile} (see
+\code{\link[=use_kpkg_docker]{use_kpkg_docker()}}) and pushed to the container registry of the
+project (\code{ci:r-latest} and \code{ci:r-devel}) when the Dockerfile changes
+and on scheduled or manual pipelines. It needs a runner that allows
+Docker-in-Docker (privileged mode).
+\item \code{check}: \verb{R CMD check} with R release on every branch and R devel on
+\code{dev} and \code{main}.
 \item \code{coverage}: test coverage with covr. GitLab reads the percentage in the
 log for the coverage badge of \code{\link[=use_kpkg_readme]{use_kpkg_readme()}}.
 \item \code{pages}: pkgdown site with GitLab Pages, the site of \code{main} at the root

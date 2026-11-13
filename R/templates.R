@@ -15,10 +15,13 @@
 kpkg_templates <- function() {
   data.frame(
     template = c(
+      "github/ci-image.yaml",
       "github/R-CMD-check.yaml",
       "github/pkgdown.yaml",
       "github/test-coverage.yaml",
       "gitlab/gitlab-ci.yml",
+      "project/Dockerfile",
+      "devcontainer/devcontainer.json",
       "project/_pkgdown.yml",
       "project/build_site.R",
       "project/render_reports.R",
@@ -26,10 +29,13 @@ kpkg_templates <- function() {
       "project/lintr"
     ),
     target = c(
+      ".github/workflows/ci-image.yaml",
       ".github/workflows/R-CMD-check.yaml",
       ".github/workflows/pkgdown.yaml",
       ".github/workflows/test-coverage.yaml",
       ".gitlab-ci.yml",
+      "Dockerfile",
+      ".devcontainer/devcontainer.json",
       "_pkgdown.yml",
       "dev/build_site.R",
       "dev/render_reports.R",
@@ -40,7 +46,10 @@ kpkg_templates <- function() {
       "use_kpkg_github",
       "use_kpkg_github",
       "use_kpkg_github",
+      "use_kpkg_github",
       "use_kpkg_gitlab",
+      "use_kpkg_docker",
+      "use_kpkg_docker",
       "use_kpkg_pkgdown",
       "use_kpkg_site_scripts",
       "use_kpkg_site_scripts",
@@ -65,6 +74,12 @@ kpkg_templates <- function() {
 #' * `test-coverage`: test coverage with covr, uploaded to Codecov (secret
 #'   `CODECOV_TOKEN`), for the coverage badge of [use_kpkg_readme()].
 #'
+#' The Linux jobs (`R CMD check` with R release, site, coverage) run in the
+#' image of the `Dockerfile` at the root of the package, see
+#' [use_kpkg_docker()]: the workflow `ci-image`, called by the others, builds
+#' it and pushes it to the GitHub container registry
+#' (`ghcr.io/<owner>/<repo>/ci`) when the Dockerfile changes.
+#'
 #' @param workflows Workflows to add.
 #' @param overwrite Whether to replace existing files, e.g. to update them
 #'   to the templates of the installed kpkg.r version.
@@ -86,7 +101,8 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown",
   if ("pkgdown" %in% workflows) {
     use_kpkg_site_scripts()
   }
-  written <- vapply(workflows, function(w) {
+  use_kpkg_docker()
+  written <- vapply(c("ci-image", workflows), function(w) {
     copy_template(
       file.path("github", paste0(w, ".yaml")),
       file.path(".github", "workflows", paste0(w, ".yaml")),
@@ -101,8 +117,13 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown",
 #' Copies the kpkg.r `.gitlab-ci.yml`, the GitLab CI equivalent of the
 #' workflows of [use_kpkg_github()]:
 #'
-#' * `check`: `R CMD check` with R release and R devel (Docker images
-#'   `rocker/r-ver`), on every branch.
+#' * `ci-image`: images of the jobs, built from the `Dockerfile` (see
+#'   [use_kpkg_docker()]) and pushed to the container registry of the
+#'   project (`ci:r-latest` and `ci:r-devel`) when the Dockerfile changes
+#'   and on scheduled or manual pipelines. It needs a runner that allows
+#'   Docker-in-Docker (privileged mode).
+#' * `check`: `R CMD check` with R release on every branch and R devel on
+#'   `dev` and `main`.
 #' * `coverage`: test coverage with covr. GitLab reads the percentage in the
 #'   log for the coverage badge of [use_kpkg_readme()].
 #' * `pages`: pkgdown site with GitLab Pages, the site of `main` at the root
@@ -121,9 +142,51 @@ use_kpkg_github <- function(workflows = c("R-CMD-check", "pkgdown",
 use_kpkg_gitlab <- function(overwrite = FALSE) {
   usethis::use_build_ignore(".gitlab-ci.yml")
   use_kpkg_site_scripts()
+  use_kpkg_docker()
   written <- copy_template(
     "gitlab/gitlab-ci.yml", ".gitlab-ci.yml",
     overwrite = overwrite
+  )
+  invisible(written[!is.na(written)])
+}
+
+#' Add the Docker image of the CI and the dev container
+#'
+#' Copies:
+#'
+#' * `Dockerfile`, at the root of the package: the image of the CI jobs of
+#'   [use_kpkg_github()] and [use_kpkg_gitlab()], based on `rocker/r-ver`
+#'   (build argument `R_VERSION`), with pandoc, pak, rcmdcheck, covr,
+#'   pkgdown, devtools and the Quarto CLI. The dependencies of the package
+#'   are installed by the jobs.
+#' * `.devcontainer/devcontainer.json`: a dev container built from the same
+#'   Dockerfile, to run the checks locally in the environment of the CI
+#'   before pushing (VS Code "Dev Containers: Reopen in Container", GitHub
+#'   Codespaces or the `devcontainer` CLI).
+#'
+#' The CI functions call it: the CI needs the Dockerfile.
+#'
+#' @inheritParams use_kpkg_github
+#' @return The paths of the files written, invisibly.
+#' @export
+#' @examples
+#' \dontrun{
+#' use_kpkg_docker()
+#' }
+use_kpkg_docker <- function(overwrite = FALSE) {
+  usethis::use_build_ignore(c("^Dockerfile$", "^\\.devcontainer$"),
+    escape = FALSE
+  )
+  written <- c(
+    copy_template(
+      "project/Dockerfile", "Dockerfile",
+      overwrite = overwrite
+    ),
+    copy_template(
+      "devcontainer/devcontainer.json",
+      file.path(".devcontainer", "devcontainer.json"),
+      overwrite = overwrite, comment = "//"
+    )
   )
   invisible(written[!is.na(written)])
 }
@@ -220,9 +283,10 @@ use_kpkg_lintr <- function(overwrite = FALSE) {
 
 # Copies a template into the active project. `{{name}}` placeholders are
 # replaced by `data$name`; a line whose placeholder is NULL is dropped.
+# `comment` starts the line of the version header.
 # Returns the path written, or NA if the file exists and is kept.
 copy_template <- function(template, target, data = list(), overwrite = FALSE,
-                          header = TRUE) {
+                          header = TRUE, comment = "#") {
   src <- system.file("templates", template, package = "kpkg.r")
   if (!nzchar(src)) {
     stop("Unknown template: ", template, call. = FALSE)
@@ -239,7 +303,7 @@ copy_template <- function(template, target, data = list(), overwrite = FALSE,
   if (header) {
     lines <- c(
       paste0(
-        "# Template kpkg.r ", utils::packageVersion("kpkg.r"), ": ",
+        comment, " Template kpkg.r ", utils::packageVersion("kpkg.r"), ": ",
         template
       ),
       lines

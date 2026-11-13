@@ -1,6 +1,9 @@
 # GitLab CI equivalent of the GitHub workflows R-CMD-check.yaml and
 # pkgdown.yaml.
 #
+# - ci-image: image of the jobs, built from the Dockerfile at the root of the
+#   package (the dev container uses the same file, so the jobs can be run
+#   locally).
 # - check: R CMD check with the released version of R on every branch and
 #   tag, and `check-devel` with the development version on dev and main.
 # - coverage: test coverage with covr (coverage badge of the README).
@@ -9,36 +12,42 @@
 #   of the site and dev in /dev (same layout as on GitHub Pages).
 
 stages:
+  - image
   - check
   - deploy
 
-variables:
-  R_KEEP_PKG_SOURCE: "yes"
-  _R_CHECK_CRAN_INCOMING_: "false"
-  # pak installs the system requirements of the R packages (apt-get)
-  PKG_SYSREQS: "true"
+# Images of the jobs in the container registry of the project:
+# `ci:r-latest` (R release) and `ci:r-devel`. They are built when the
+# Dockerfile changes, and on scheduled or manual ("Run pipeline") pipelines,
+# to follow the new versions of R and of the tools. Docker-in-Docker needs a
+# runner with the Docker executor in privileged mode.
+ci-image:
+  stage: image
+  image: docker:28
+  services:
+    - docker:28-dind
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/ci:r-$R_VERSION
+    DOCKER_TLS_CERTDIR: "/certs"
+  parallel:
+    matrix:
+      - R_VERSION: ["latest", "devel"]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
+    - changes:
+        - Dockerfile
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" |
+        docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    # without build context: the Dockerfile copies no file. R_VERSION comes
+    # from the environment (parallel matrix)
+    - docker build --build-arg R_VERSION -t "$IMAGE" - < Dockerfile
+    - docker push "$IMAGE"
 
-.r-setup:
-  image: rocker/r-ver:$R_VERSION
-  before_script:
-    - apt-get update -qq
-    - apt-get install -y -qq --no-install-recommends pandoc qpdf git
-        libcurl4-openssl-dev libssl-dev libxml2-dev pkg-config
-    # pak from the binaries of r-lib: R-devel has no binaries on CRAN, and
-    # building pak from the sources takes about 3 minutes
-    - |
-      Rscript -e '
-        pak_repo <- sprintf(
-          "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
-          .Platform$pkgType, R.Version()$os, R.Version()$arch
-        )
-        install.packages("pak", repos = pak_repo)
-        if (!requireNamespace("pak", quietly = TRUE)) {
-          install.packages("pak")
-        }'
+.r-latest:
+  image: $CI_REGISTRY_IMAGE/ci:r-latest
 
 .check:
-  extends: .r-setup
   stage: check
   script:
     - Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
@@ -57,17 +66,16 @@ variables:
     expire_in: 1 week
 
 check:
-  extends: .check
-  variables:
-    R_VERSION: "latest"
+  extends:
+    - .r-latest
+    - .check
 
 # R-devel has no binaries on CRAN (the packages are built from the sources, so
 # the job is slow): it only runs on the dev and main branches, and it does not
 # block the pipeline.
 check-devel:
   extends: .check
-  variables:
-    R_VERSION: "devel"
+  image: $CI_REGISTRY_IMAGE/ci:r-devel
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
@@ -76,14 +84,10 @@ check-devel:
 # regex) for the badge of the README, and the cobertura report for the
 # coverage of the merge requests.
 coverage:
-  extends: .r-setup
+  extends: .r-latest
   stage: check
-  variables:
-    R_VERSION: "latest"
   script:
     - Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
-    # xml2 is needed by covr::to_cobertura()
-    - Rscript -e 'pak::pkg_install(c("covr", "xml2"))'
     - |
       Rscript -e '
         cov <- covr::package_coverage()
@@ -97,20 +101,13 @@ coverage:
         path: cobertura.xml
 
 pages:
-  extends: .r-setup
+  extends: .r-latest
   stage: deploy
   variables:
-    R_VERSION: "latest"
     GIT_DEPTH: "0"
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
   script:
-    - Rscript -e 'pak::pkg_install(c("pkgdown", "quarto"))'
-    # Quarto CLI, to render the books of `reports/` (rocker images script)
-    - |
-      if ls reports/*/_quarto.yml > /dev/null 2>&1; then
-        /rocker_scripts/install_quarto.sh
-      fi
     - git fetch --quiet origin main
     - git fetch --quiet origin dev || echo "No dev branch"
     - |

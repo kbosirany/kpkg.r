@@ -1,5 +1,24 @@
 # kpkg.r (development version)
 
+* Nouvelle fonction `use_kpkg_docker()` : ajoute un `Dockerfile` à la racine
+  du package (image de la CI, base `rocker/r-ver` avec pandoc, pak,
+  rcmdcheck, covr, pkgdown, devtools et Quarto) et un
+  `.devcontainer/devcontainer.json` construit sur ce même Dockerfile, pour
+  tester en local dans l'environnement de la CI avant de pousser (#9).
+  `use_kpkg_github()` et `use_kpkg_gitlab()` l'appellent.
+* Template `gitlab/gitlab-ci.yml` : un job `ci-image` construit les images
+  `ci:r-latest` et `ci:r-devel` depuis le `Dockerfile` et les pousse dans le
+  registre du projet (quand le Dockerfile change, et sur pipeline planifié ou
+  manuel) ; les jobs `check`, `check-devel`, `coverage` et `pages` les
+  utilisent au lieu de tout installer à chaque job. Demande un runner qui
+  autorise Docker-in-Docker (mode privilégié).
+* Templates GitHub : nouveau workflow réutilisable `ci-image`, qui pousse
+  l'image sur `ghcr.io` avec le hash du Dockerfile pour tag (construite
+  seulement quand il change). `R-CMD-check` (Ubuntu, R release, job
+  `R-CMD-check-docker`), `pkgdown` et `test-coverage` tournent dans l'image ;
+  le déploiement du site et l'envoi à Codecov restent sur le runner. macOS,
+  Windows, R devel et oldrel-1 restent sur `r-lib/actions`.
+
 * Template `gitlab/gitlab-ci.yml` : `pak` est installé depuis les binaires de
   r-lib (`https://r-lib.github.io/p/pak/stable/...`) au lieu de
   `install.packages("pak")`, avec repli sur CRAN. Avec R-devel, qui n'a pas de

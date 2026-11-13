@@ -102,6 +102,27 @@ usethis::use_version("dev")   # 0.1.1      -> 0.1.1.9000
 4. Sur `dev`, mettre `main` à jour localement puis
    `usethis::use_version("dev")`, commit et push.
 
+## Tester en local dans l'environnement de la CI
+
+`use_kpkg_docker()`, appelé par `use_kpkg_github()` et `use_kpkg_gitlab()`,
+ajoute un `Dockerfile` à la racine du package et un
+`.devcontainer/devcontainer.json`. La CI (jobs Linux sur GitHub, tous les
+jobs sur GitLab) et le conteneur de dev utilisent la même image : ce qui
+passe en local passe en CI.
+
+- VS Code : extension *Dev Containers*, puis **Dev Containers: Reopen in
+  Container** ; GitHub Codespaces fonctionne de la même façon.
+- En ligne de commande, avec le CLI `devcontainer` :
+
+  ```sh
+  devcontainer up --workspace-folder .
+  devcontainer exec --workspace-folder . Rscript -e 'devtools::check()'
+  ```
+
+Pour suivre une nouvelle version de R ou des outils, modifier le
+`Dockerfile` (par exemple une date en commentaire) : la CI reconstruit
+l'image. Sur GitLab, un pipeline planifié la reconstruit aussi.
+
 ## Réglages manuels côté GitHub
 
 À faire une fois par dépôt, après le premier push du workflow pkgdown :
@@ -130,9 +151,13 @@ usethis::use_version("dev")   # 0.1.1      -> 0.1.1.9000
 Le `.gitlab-ci.yml` fait le même travail sur une forge GitLab (par exemple
 après import du dépôt GitHub) :
 
-- le job `check` lance `R CMD check` avec R release et R devel, dans les
-  images Docker `rocker/r-ver` ; il demande donc un runner avec l'exécuteur
-  Docker ;
+- le job `ci-image` construit l'image des jobs depuis le `Dockerfile` du
+  package (base `rocker/r-ver`) et la pousse dans le registre de conteneurs
+  du projet, quand le Dockerfile change ou sur un pipeline planifié ou
+  manuel ; il demande un runner avec l'exécuteur Docker en mode privilégié
+  (Docker-in-Docker) ;
+- le job `check` lance `R CMD check` dans cette image avec R release (et R
+  devel sur `dev` et `main`) ;
 - le job `pages` construit le site des branches `main` et `dev` à chaque
   push sur l'une d'elles (GitLab Pages ne garde que le dernier déploiement)
   et le publie avec GitLab Pages, `main` à la racine et `dev` dans `/dev`.
@@ -140,10 +165,15 @@ après import du dépôt GitHub) :
 Réglages à vérifier une fois par projet :
 
 1. **Settings** > **CI/CD** > **Runners** : un runner (partagé ou de
-   groupe) doit être disponible pour le projet.
-2. **Deploy** > **Pages** : l'adresse du site y apparaît après le premier
+   groupe) doit être disponible pour le projet, en mode privilégié pour le
+   job `ci-image`.
+2. **Settings** > **General** > **Visibility, project features,
+   permissions** : activer le **Container registry**. Facultatif :
+   **Build** > **Pipeline schedules**, un pipeline mensuel pour reconstruire
+   l'image.
+3. **Deploy** > **Pages** : l'adresse du site y apparaît après le premier
    passage du job `pages`. Le site est construit avec cette adresse
    (variable `CI_PAGES_URL`) et non avec l'`url` de `_pkgdown.yml`.
-3. **Settings** > **General** > **Visibility, project features,
+4. **Settings** > **General** > **Visibility, project features,
    permissions** > **Pages** : choisir qui peut voir le site.
-4. **Settings** > **Merge requests** > **Merge method** : **Merge commit**.
+5. **Settings** > **Merge requests** > **Merge method** : **Merge commit**.

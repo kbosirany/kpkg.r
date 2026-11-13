@@ -1,0 +1,23 @@
+// Template kpkg.r 0.2.0.9000: devcontainer/devcontainer.json
+// Dev container: the image of the CI (Dockerfile at the root of the
+// package), to run the checks locally before pushing (VS Code "Dev
+// Containers: Reopen in Container", GitHub Codespaces or the `devcontainer`
+// CLI).
+{
+  "name": "R package (CI image)",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "args": { "R_VERSION": "latest" }
+  },
+  // Dependencies of the package, and languageserver for the R extension
+  "postCreateCommand": [
+    "Rscript",
+    "-e", "pak::local_install_dev_deps(dependencies = TRUE)",
+    "-e", "pak::pkg_install('languageserver')"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": ["REditorSupport.r"]
+    }
+  }
+}

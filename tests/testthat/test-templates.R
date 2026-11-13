@@ -15,7 +15,11 @@ test_that("use_kpkg_github() copies the workflows with a version header", {
   path <- local_pkg()
   msgs <- capture_messages(files <- use_kpkg_github())
   expect_match(msgs, "R-CMD-check.yaml", all = FALSE)
-  expect_length(files, 3)
+  expect_length(files, 4)
+  expect_true(
+    file.exists(file.path(path, ".github/workflows/ci-image.yaml"))
+  )
+  expect_true(file.exists(file.path(path, "Dockerfile")))
   check <- read_file(file.path(path, ".github/workflows/R-CMD-check.yaml"))
   expect_match(
     check[1],
@@ -50,6 +54,41 @@ test_that("the CI runs dev/build_site.R", {
   for (template in c("github/pkgdown.yaml", "gitlab/gitlab-ci.yml")) {
     src <- system.file("templates", template, package = "kpkg.r")
     expect_true(any(grepl("dev/build_site.R", read_file(src), fixed = TRUE)))
+  }
+})
+
+test_that("use_kpkg_docker() writes the Dockerfile and the dev container", {
+  path <- local_pkg()
+  suppressMessages(files <- use_kpkg_docker())
+  expect_length(files, 2)
+  dockerfile <- read_file(file.path(path, "Dockerfile"))
+  expect_match(dockerfile[1], "^# Template kpkg.r")
+  expect_true(any(grepl("^FROM rocker/r-ver", dockerfile)))
+  # devcontainer.json is JSON with comments: the header starts with //
+  json <- read_file(file.path(path, ".devcontainer/devcontainer.json"))
+  expect_match(json[1], "^// Template kpkg.r")
+  expect_true(any(grepl('"dockerfile": "../Dockerfile"', json, fixed = TRUE)))
+  ignore <- read_file(file.path(path, ".Rbuildignore"))
+  expect_true(all(c("^Dockerfile$", "^\\.devcontainer$") %in% ignore))
+
+  # the GitLab CI adds them too
+  path <- local_pkg()
+  suppressMessages(use_kpkg_gitlab())
+  expect_true(file.exists(file.path(path, ".devcontainer/devcontainer.json")))
+})
+
+test_that("the CI builds its image from the Dockerfile", {
+  for (template in c("github/ci-image.yaml", "gitlab/gitlab-ci.yml")) {
+    src <- system.file("templates", template, package = "kpkg.r")
+    expect_true(any(grepl("< Dockerfile", read_file(src), fixed = TRUE)))
+  }
+  for (w in c("R-CMD-check", "pkgdown", "test-coverage")) {
+    src <- system.file(
+      "templates", "github", paste0(w, ".yaml"), package = "kpkg.r"
+    )
+    expect_true(any(grepl(
+      "needs.ci-image.outputs.image", read_file(src), fixed = TRUE
+    )), label = w)
   }
 })
 

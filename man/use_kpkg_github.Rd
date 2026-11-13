@@ -33,6 +33,12 @@ renders the Quarto books of \verb{reports/} in the site.
 \item \code{test-coverage}: test coverage with covr, uploaded to Codecov (secret
 \code{CODECOV_TOKEN}), for the coverage badge of \code{\link[=use_kpkg_readme]{use_kpkg_readme()}}.
 }
+
+The Linux jobs (\verb{R CMD check} with R release, site, coverage) run in the
+image of the \code{Dockerfile} at the root of the package, see
+\code{\link[=use_kpkg_docker]{use_kpkg_docker()}}: the workflow \code{ci-image}, called by the others, builds
+it and pushes it to the GitHub container registry
+(\verb{ghcr.io/<owner>/<repo>/ci}) when the Dockerfile changes.
 }
 \examples{
 \dontrun{

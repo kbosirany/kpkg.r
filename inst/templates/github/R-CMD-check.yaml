@@ -1,4 +1,8 @@
 # Adapted from https://github.com/r-lib/actions/tree/v2/examples
+#
+# Ubuntu with R release runs in the image of the Dockerfile (job
+# `R-CMD-check-docker`, same environment as the dev container and GitLab CI);
+# the other systems and versions of R are set up by r-lib/actions.
 on:
   push:
     branches: [main, dev]
@@ -9,6 +13,36 @@ name: R-CMD-check
 permissions: read-all
 
 jobs:
+  ci-image:
+    uses: ./.github/workflows/ci-image.yaml
+    permissions:
+      contents: read
+      packages: write
+
+  R-CMD-check-docker:
+    needs: ci-image
+    runs-on: ubuntu-latest
+    name: ubuntu-latest (release, Docker)
+    container:
+      image: ${{ needs.ci-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install the dependencies
+        run: Rscript -e 'pak::local_install_dev_deps(dependencies = TRUE)'
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual")'
+
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
@@ -21,7 +55,6 @@ jobs:
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
 
     env:

@@ -8,3 +8,5 @@
 ^\.github$
 ^\.gitlab-ci\.yml$
 ^\.lintr$
+^\.devcontainer$
+^Dockerfile$
